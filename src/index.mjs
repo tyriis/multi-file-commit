@@ -2,6 +2,10 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { commit } from './commit.mjs'
 import { getFiles } from './get-files.mjs'
+import 'zx/globals'
+
+/* global $ */
+$.verbose = false
 
 try {
   const filesInput = core.getInput('files')

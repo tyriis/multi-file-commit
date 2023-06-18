@@ -45,7 +45,12 @@ export const getFiles = async (filesInput) => {
   const data = []
   for (const path of files) {
     const content = await $`cat ${path}`
-    const encoding = await $`git show :${path} | file -b --mime-encoding -`
+    let encoding = 'utf-8'
+    try {
+      encoding = await $`git show :${path} | file -b --mime-encoding -`
+    } catch (err) {
+      echo`${JSON.stringify({ err }, null, 2)}`
+    }
     const mode = await $`stat -c "%a" ${path}`
     const item = {
       path,

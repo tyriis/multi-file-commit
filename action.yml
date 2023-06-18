@@ -1,0 +1,26 @@
+---
+name: commit-multi-file
+description: Commit multiple files via the github API
+inputs:
+  repository:
+    description: >
+      the repository you want to push the commit, if not provided it will push to repo where the action runs
+    default: ${{ github.repository }}
+  ref:
+    description: The branch you want to push the commit, branch will not created, it need to be created before!
+    default: ${{ github.ref_name }}
+  token:
+    description: >
+      the APP TOKEN, hint: you can use a PAT aswel
+    default: ${{ github.token }}
+  message:
+    description: >
+      The commit message for the commit.
+    required: true
+  files:
+    description: >
+      A list of files to commit, prevent other staged files to be commited
+      Example: src/main.mjs,src/main.spec.js
+runs:
+  using: node16
+  main: dist/index.mjs

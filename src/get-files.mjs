@@ -45,11 +45,18 @@ export const getFiles = async (filesInput) => {
   const data = []
   for (const path of files) {
     const content = await $`cat ${path}`
-    let encoding = 'utf-8'
+    let encoding
+    // TODO: figure out how to handle this properly
     try {
       encoding = await $`git show :${path} | file -b --mime-encoding -`
     } catch (err) {
+      if (err._code === 141) {
+        encoding = err._stdout
+      }
       echo`${JSON.stringify({ err }, null, 2)}`
+    }
+    if (!encoding) {
+      throw new Error('encoding not detected!')
     }
     const mode = await $`stat -c "%a" ${path}`
     const item = {

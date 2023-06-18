@@ -23,8 +23,15 @@ export const getFiles = async (filesInput) => {
   // const diff = await $`git diff --name-only`
 
   // track added files only
-  const diff = await $`git status --short | grep A | awk -F ' ' '{print $2}'`
-  let files = `${diff}`.trim().split('\n')
+  const diff = await $`git status --short`
+  const rows = `${diff}`.trim().split('\n')
+  let files = []
+  for (let row of rows) {
+    let columns = row.split(' ').filter((item) => item !== '')
+    if (['A', 'M', 'AM'].indexOf(columns[0]) >= 0) {
+      files.push(columns[1])
+    }
+  }
 
   // remove files not listed in `filesInput`
   if (filesInput) {

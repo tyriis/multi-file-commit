@@ -72981,10 +72981,15 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5438);
 /* harmony import */ var _commit_mjs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(7170);
 /* harmony import */ var _get_files_mjs__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(398);
+/* harmony import */ var zx_globals__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(182);
 
 
 
 
+
+
+/* global $ */
+$.verbose = false
 
 try {
   const filesInput = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('files')

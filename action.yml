@@ -1,5 +1,5 @@
 ---
-name: commit-multi-file
+name: multi-file-commit
 description: Commit multiple files via the github API
 inputs:
   repository:

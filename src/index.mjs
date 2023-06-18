@@ -15,7 +15,7 @@ try {
   const message = core.getInput('message')
   const branch = core.getInput('ref') || context.github.ref_name
   const files = await getFiles(filesInput)
-  const result = commit(
+  const result = await commit(
     {
       token,
       branch,
@@ -25,7 +25,7 @@ try {
     files,
     message
   )
-  console.log(JSON.stringify({ result, context }, undefined, 2))
+  console.log(JSON.stringify({ result, context, branch, repo, message }, undefined, 2))
 } catch (error) {
   core.setFailed(error.message)
 }

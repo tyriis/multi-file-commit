@@ -72999,7 +72999,7 @@ try {
   const message = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('message')
   const branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('ref') || context.github.ref_name
   const files = await (0,_get_files_mjs__WEBPACK_IMPORTED_MODULE_3__/* .getFiles */ .b)(filesInput)
-  const result = (0,_commit_mjs__WEBPACK_IMPORTED_MODULE_2__/* .commit */ .t)(
+  const result = await (0,_commit_mjs__WEBPACK_IMPORTED_MODULE_2__/* .commit */ .t)(
     {
       token,
       branch,
@@ -73009,7 +73009,7 @@ try {
     files,
     message
   )
-  console.log(JSON.stringify({ result, context }, undefined, 2))
+  console.log(JSON.stringify({ result, context, branch, repo, message }, undefined, 2))
 } catch (error) {
   _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message)
 }

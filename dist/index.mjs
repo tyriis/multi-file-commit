@@ -11676,77 +11676,61 @@ retry.VERSION = VERSION;
 /***/ }),
 
 /***/ 9968:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// pkg/dist-src/index.js
-var dist_src_exports = {};
-__export(dist_src_exports, {
-  throttling: () => throttling
-});
-module.exports = __toCommonJS(dist_src_exports);
-var import_light = __toESM(__nccwpck_require__(1174));
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-// pkg/dist-src/version.js
-var VERSION = "6.1.0";
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-// pkg/dist-src/wrap-request.js
-var noop = () => Promise.resolve();
+var BottleneckLight = _interopDefault(__nccwpck_require__(1174));
+
+const VERSION = "5.2.3";
+
+const noop = () => Promise.resolve();
+// @ts-expect-error
 function wrapRequest(state, request, options) {
   return state.retryLimiter.schedule(doRequest, state, request, options);
 }
+// @ts-expect-error
 async function doRequest(state, request, options) {
   const isWrite = options.method !== "GET" && options.method !== "HEAD";
-  const { pathname } = new URL(options.url, "http://github.test");
+  const {
+    pathname
+  } = new URL(options.url, "http://github.test");
   const isSearch = options.method === "GET" && pathname.startsWith("/search/");
   const isGraphQL = pathname.startsWith("/graphql");
   const retryCount = ~~request.retryCount;
-  const jobOptions = retryCount > 0 ? { priority: 0, weight: 0 } : {};
+  const jobOptions = retryCount > 0 ? {
+    priority: 0,
+    weight: 0
+  } : {};
   if (state.clustering) {
-    jobOptions.expiration = 1e3 * 60;
+    // Remove a job from Redis if it has not completed or failed within 60s
+    // Examples: Node process terminated, client disconnected, etc.
+    // @ts-expect-error
+    jobOptions.expiration = 1000 * 60;
   }
+  // Guarantee at least 1000ms between writes
+  // GraphQL can also trigger writes
   if (isWrite || isGraphQL) {
     await state.write.key(state.id).schedule(jobOptions, noop);
   }
+  // Guarantee at least 3000ms between requests that trigger notifications
   if (isWrite && state.triggersNotification(pathname)) {
     await state.notifications.key(state.id).schedule(jobOptions, noop);
   }
+  // Guarantee at least 2000ms between search requests
   if (isSearch) {
     await state.search.key(state.id).schedule(jobOptions, noop);
   }
   const req = state.global.key(state.id).schedule(jobOptions, request, options);
   if (isGraphQL) {
     const res = await req;
-    if (res.data.errors != null && // @ts-expect-error
-    res.data.errors.some((error) => error.type === "RATE_LIMITED")) {
+    if (res.data.errors != null &&
+    // @ts-expect-error
+    res.data.errors.some(error => error.type === "RATE_LIMITED")) {
       const error = Object.assign(new Error("GraphQL Rate Limit Exceeded"), {
         response: res,
         data: res.data
@@ -11757,41 +11741,37 @@ async function doRequest(state, request, options) {
   return req;
 }
 
-// pkg/dist-src/generated/triggers-notification-paths.js
-var triggers_notification_paths_default = [
-  "/orgs/{org}/invitations",
-  "/orgs/{org}/invitations/{invitation_id}",
-  "/orgs/{org}/teams/{team_slug}/discussions",
-  "/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments",
-  "/repos/{owner}/{repo}/collaborators/{username}",
-  "/repos/{owner}/{repo}/commits/{commit_sha}/comments",
-  "/repos/{owner}/{repo}/issues",
-  "/repos/{owner}/{repo}/issues/{issue_number}/comments",
-  "/repos/{owner}/{repo}/pulls",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/comments",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/merge",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
-  "/repos/{owner}/{repo}/pulls/{pull_number}/reviews",
-  "/repos/{owner}/{repo}/releases",
-  "/teams/{team_id}/discussions",
-  "/teams/{team_id}/discussions/{discussion_number}/comments"
-];
+var triggersNotificationPaths = ["/orgs/{org}/invitations", "/orgs/{org}/invitations/{invitation_id}", "/orgs/{org}/teams/{team_slug}/discussions", "/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "/repos/{owner}/{repo}/collaborators/{username}", "/repos/{owner}/{repo}/commits/{commit_sha}/comments", "/repos/{owner}/{repo}/issues", "/repos/{owner}/{repo}/issues/{issue_number}/comments", "/repos/{owner}/{repo}/pulls", "/repos/{owner}/{repo}/pulls/{pull_number}/comments", "/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies", "/repos/{owner}/{repo}/pulls/{pull_number}/merge", "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "/repos/{owner}/{repo}/pulls/{pull_number}/reviews", "/repos/{owner}/{repo}/releases", "/teams/{team_id}/discussions", "/teams/{team_id}/discussions/{discussion_number}/comments"];
 
-// pkg/dist-src/route-matcher.js
 function routeMatcher(paths) {
-  const regexes = paths.map(
-    (path) => path.split("/").map((c) => c.startsWith("{") ? "(?:.+?)" : c).join("/")
-  );
-  const regex2 = `^(?:${regexes.map((r) => `(?:${r})`).join("|")})[^/]*$`;
-  return new RegExp(regex2, "i");
+  // EXAMPLE. For the following paths:
+  /* [
+      "/orgs/{org}/invitations",
+      "/repos/{owner}/{repo}/collaborators/{username}"
+  ] */
+  const regexes = paths.map(path => path.split("/").map(c => c.startsWith("{") ? "(?:.+?)" : c).join("/"));
+  // 'regexes' would contain:
+  /* [
+      '/orgs/(?:.+?)/invitations',
+      '/repos/(?:.+?)/(?:.+?)/collaborators/(?:.+?)'
+  ] */
+  const regex = `^(?:${regexes.map(r => `(?:${r})`).join("|")})[^/]*$`;
+  // 'regex' would contain:
+  /*
+    ^(?:(?:\/orgs\/(?:.+?)\/invitations)|(?:\/repos\/(?:.+?)\/(?:.+?)\/collaborators\/(?:.+?)))[^\/]*$
+       It may look scary, but paste it into https://www.debuggex.com/
+    and it will make a lot more sense!
+  */
+  return new RegExp(regex, "i");
 }
 
-// pkg/dist-src/index.js
-var regex = routeMatcher(triggers_notification_paths_default);
-var triggersNotification = regex.test.bind(regex);
-var groups = {};
-var createGroups = function(Bottleneck, common) {
+// @ts-expect-error
+// Workaround to allow tests to directly access the triggersNotification function.
+const regex = routeMatcher(triggersNotificationPaths);
+const triggersNotification = regex.test.bind(regex);
+const groups = {};
+// @ts-expect-error
+const createGroups = function (Bottleneck, common) {
   groups.global = new Bottleneck.Group({
     id: "octokit-global",
     maxConcurrent: 10,
@@ -11800,50 +11780,62 @@ var createGroups = function(Bottleneck, common) {
   groups.search = new Bottleneck.Group({
     id: "octokit-search",
     maxConcurrent: 1,
-    minTime: 2e3,
+    minTime: 2000,
     ...common
   });
   groups.write = new Bottleneck.Group({
     id: "octokit-write",
     maxConcurrent: 1,
-    minTime: 1e3,
+    minTime: 1000,
     ...common
   });
   groups.notifications = new Bottleneck.Group({
     id: "octokit-notifications",
     maxConcurrent: 1,
-    minTime: 3e3,
+    minTime: 3000,
     ...common
   });
 };
 function throttling(octokit, octokitOptions) {
   const {
     enabled = true,
-    Bottleneck = import_light.default,
+    Bottleneck = BottleneckLight,
     id = "no-id",
-    timeout = 1e3 * 60 * 2,
+    timeout = 1000 * 60 * 2,
     // Redis TTL: 2 minutes
     connection
   } = octokitOptions.throttle || {};
   if (!enabled) {
     return {};
   }
-  const common = { connection, timeout };
+  const common = {
+    connection,
+    timeout
+  };
   if (groups.global == null) {
     createGroups(Bottleneck, common);
   }
-  const state = Object.assign(
-    {
-      clustering: connection != null,
-      triggersNotification,
-      fallbackSecondaryRateRetryAfter: 60,
-      retryAfterBaseValue: 1e3,
-      retryLimiter: new Bottleneck(),
-      id,
-      ...groups
-    },
-    octokitOptions.throttle
-  );
+  if (octokitOptions.throttle && octokitOptions.throttle.minimalSecondaryRateRetryAfter) {
+    octokit.log.warn("[@octokit/plugin-throttling] `options.throttle.minimalSecondaryRateRetryAfter` is deprecated, please use `options.throttle.fallbackSecondaryRateRetryAfter` instead");
+    octokitOptions.throttle.fallbackSecondaryRateRetryAfter = octokitOptions.throttle.minimalSecondaryRateRetryAfter;
+    delete octokitOptions.throttle.minimalSecondaryRateRetryAfter;
+  }
+  if (octokitOptions.throttle && octokitOptions.throttle.onAbuseLimit) {
+    octokit.log.warn("[@octokit/plugin-throttling] `onAbuseLimit()` is deprecated and will be removed in a future release of `@octokit/plugin-throttling`, please use the `onSecondaryRateLimit` handler instead");
+    // @ts-ignore types don't allow for both properties to be set
+    octokitOptions.throttle.onSecondaryRateLimit = octokitOptions.throttle.onAbuseLimit;
+    // @ts-ignore
+    delete octokitOptions.throttle.onAbuseLimit;
+  }
+  const state = Object.assign({
+    clustering: connection != null,
+    triggersNotification,
+    fallbackSecondaryRateRetryAfter: 60,
+    retryAfterBaseValue: 1000,
+    retryLimiter: new Bottleneck(),
+    id,
+    ...groups
+  }, octokitOptions.throttle);
   if (typeof state.onSecondaryRateLimit !== "function" || typeof state.onRateLimit !== "function") {
     throw new Error(`octokit/plugin-throttling error:
         You must pass the onSecondaryRateLimit and onRateLimit error handlers.
@@ -11859,56 +11851,59 @@ function throttling(octokit, octokitOptions) {
   }
   const events = {};
   const emitter = new Bottleneck.Events(events);
+  // @ts-expect-error
   events.on("secondary-limit", state.onSecondaryRateLimit);
+  // @ts-expect-error
   events.on("rate-limit", state.onRateLimit);
-  events.on(
-    "error",
-    (e) => octokit.log.warn("Error in throttling-plugin limit handler", e)
-  );
-  state.retryLimiter.on("failed", async function(error, info) {
-    const [state2, request, options] = info.args;
-    const { pathname } = new URL(options.url, "http://github.test");
+  // @ts-expect-error
+  events.on("error", e => octokit.log.warn("Error in throttling-plugin limit handler", e));
+  // @ts-expect-error
+  state.retryLimiter.on("failed", async function (error, info) {
+    const [state, request, options] = info.args;
+    const {
+      pathname
+    } = new URL(options.url, "http://github.test");
     const shouldRetryGraphQL = pathname.startsWith("/graphql") && error.status !== 401;
     if (!(shouldRetryGraphQL || error.status === 403)) {
       return;
     }
     const retryCount = ~~request.retryCount;
     request.retryCount = retryCount;
+    // backward compatibility
     options.request.retryCount = retryCount;
-    const { wantRetry, retryAfter = 0 } = await async function() {
+    const {
+      wantRetry,
+      retryAfter = 0
+    } = await async function () {
       if (/\bsecondary rate\b/i.test(error.message)) {
-        const retryAfter2 = Number(error.response.headers["retry-after"]) || state2.fallbackSecondaryRateRetryAfter;
-        const wantRetry2 = await emitter.trigger(
-          "secondary-limit",
-          retryAfter2,
-          options,
-          octokit,
-          retryCount
-        );
-        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
+        // The user has hit the secondary rate limit. (REST and GraphQL)
+        // https://docs.github.com/en/rest/overview/resources-in-the-rest-api#secondary-rate-limits
+        // The Retry-After header can sometimes be blank when hitting a secondary rate limit,
+        // but is always present after 2-3s, so make sure to set `retryAfter` to at least 5s by default.
+        const retryAfter = Number(error.response.headers["retry-after"]) || state.fallbackSecondaryRateRetryAfter;
+        const wantRetry = await emitter.trigger("secondary-limit", retryAfter, options, octokit, retryCount);
+        return {
+          wantRetry,
+          retryAfter
+        };
       }
       if (error.response.headers != null && error.response.headers["x-ratelimit-remaining"] === "0") {
-        const rateLimitReset = new Date(
-          ~~error.response.headers["x-ratelimit-reset"] * 1e3
-        ).getTime();
-        const retryAfter2 = Math.max(
-          Math.ceil((rateLimitReset - Date.now()) / 1e3),
-          0
-        );
-        const wantRetry2 = await emitter.trigger(
-          "rate-limit",
-          retryAfter2,
-          options,
-          octokit,
-          retryCount
-        );
-        return { wantRetry: wantRetry2, retryAfter: retryAfter2 };
+        // The user has used all their allowed calls for the current time period (REST and GraphQL)
+        // https://docs.github.com/en/rest/reference/rate-limit (REST)
+        // https://docs.github.com/en/graphql/overview/resource-limitations#rate-limit (GraphQL)
+        const rateLimitReset = new Date(~~error.response.headers["x-ratelimit-reset"] * 1000).getTime();
+        const retryAfter = Math.max(Math.ceil((rateLimitReset - Date.now()) / 1000), 0);
+        const wantRetry = await emitter.trigger("rate-limit", retryAfter, options, octokit, retryCount);
+        return {
+          wantRetry,
+          retryAfter
+        };
       }
       return {};
     }();
     if (wantRetry) {
       request.retryCount++;
-      return retryAfter * state2.retryAfterBaseValue;
+      return retryAfter * state.retryAfterBaseValue;
     }
   });
   octokit.hook.wrap("request", wrapRequest.bind(null, state));
@@ -11916,8 +11911,9 @@ function throttling(octokit, octokitOptions) {
 }
 throttling.VERSION = VERSION;
 throttling.triggersNotification = triggersNotification;
-// Annotate the CommonJS export names for ESM import in node:
-0 && (0);
+
+exports.throttling = throttling;
+//# sourceMappingURL=index.js.map
 
 
 /***/ }),
@@ -44082,7 +44078,7 @@ var import_plugin_retry = __nccwpck_require__(6298);
 var import_plugin_throttling = __nccwpck_require__(9968);
 
 // pkg/dist-src/version.js
-var VERSION = "2.0.21";
+var VERSION = "2.0.22";
 
 // pkg/dist-src/octokit.js
 var Octokit = import_core.Octokit.plugin(

@@ -130,7 +130,7 @@ export const commit = async (config, files, message, tag) => {
   if (tag) {
     // Update Reference
     // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#update-a-reference
-    const updateTagResponse = await octokit.request('PATCH /repos/{owner}/{repo}/git/refs/tags/{tag}', {
+    const updateTagResponse = await octokit.request('POST /repos/{owner}/{repo}/git/refs/tags/{tag}', {
       tag,
       sha: updateResponse.data.object.sha,
       owner,

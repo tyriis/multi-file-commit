@@ -22,10 +22,10 @@ try {
       branch,
       owner: repo[0],
       repo: repo[1],
-      tag,
     },
     files,
-    message
+    message,
+    tag
   )
   console.log(JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2))
   core.setOutput('sha', result.object?.sha)

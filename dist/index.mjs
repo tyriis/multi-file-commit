@@ -73017,10 +73017,10 @@ try {
       branch,
       owner: repo[0],
       repo: repo[1],
-      tag,
     },
     files,
-    message
+    message,
+    tag
   )
   console.log(JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2))
   _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('sha', result.object?.sha)

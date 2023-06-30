@@ -21,6 +21,9 @@ inputs:
     description: >
       A list of files to commit, prevent other staged files to be commited
       Example: src/main.mjs,src/main.spec.js
+  tag:
+    description: >
+      In case you want to tag your commit, just pass a tag reference and this action will do the work for you.
 outputs:
   sha:
     description: The commit sha for further referencing in your workflow

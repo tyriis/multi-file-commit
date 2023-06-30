@@ -14,6 +14,7 @@ try {
   const token = core.getInput('token')
   const message = core.getInput('message')
   const branch = core.getInput('ref') || context.github.ref_name
+  const tag = core.getInput('tag') || false
   const files = await getFiles(filesInput)
   const result = await commit(
     {
@@ -21,6 +22,7 @@ try {
       branch,
       owner: repo[0],
       repo: repo[1],
+      tag,
     },
     files,
     message

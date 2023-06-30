@@ -72772,7 +72772,7 @@ const debug = process.env.NODE_LOG_LEVEL === 'debug'
 // const octokit = new Octokit({ auth: GITHUB_TOKEN })
 
 // TOKEN AUTH tested with APP TOKEN and PAT
-const commit = async (config, files, message) => {
+const commit = async (config, files, message, tag) => {
   const octokit = new octokit__WEBPACK_IMPORTED_MODULE_1__.Octokit({ auth: config.token || process.env.GITHUB_TOKEN })
   const owner = config.owner
   const repo = config.repo
@@ -72874,6 +72874,35 @@ const commit = async (config, files, message) => {
   })
   if (debug) {
     echo`${JSON.stringify(updateResponse.data, null, 2)}`
+  }
+
+  if (tag) {
+    const tagResponse = await octokit.request('POST /repos/{owner}/{repo}/git/tags', {
+      owner,
+      repo,
+      tag,
+      message: tag,
+      object: updateResponse.data.object.sha,
+      type: 'commit',
+      headers,
+    })
+
+    if (debug) {
+      echo`${JSON.stringify(tagResponse.data, null, 2)}`
+    }
+
+    // Update Reference
+    // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#update-a-reference
+    const updateTagResponse = await octokit.request('PATCH /repos/{owner}/{repo}/git/refs/tags/{tag}', {
+      tag,
+      sha: tagResponse.data.sha,
+      owner,
+      repo,
+      headers,
+    })
+    if (debug) {
+      echo`${JSON.stringify(updateTagResponse.data, null, 2)}`
+    }
   }
   return updateResponse.data
 }
@@ -72994,6 +73023,7 @@ try {
   const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('token')
   const message = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('message')
   const branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('ref') || context.github.ref_name
+  const tag = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('tag') || false
   const files = await (0,_get_files_mjs__WEBPACK_IMPORTED_MODULE_3__/* .getFiles */ .b)(filesInput)
   const result = await (0,_commit_mjs__WEBPACK_IMPORTED_MODULE_2__/* .commit */ .t)(
     {
@@ -73001,6 +73031,7 @@ try {
       branch,
       owner: repo[0],
       repo: repo[1],
+      tag,
     },
     files,
     message

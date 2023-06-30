@@ -72877,19 +72877,19 @@ const commit = async (config, files, message, tag) => {
   }
 
   if (tag) {
-    const tagResponse = await octokit.request('POST /repos/{owner}/{repo}/git/tags', {
-      owner,
-      repo,
-      tag,
-      message: tag,
-      object: commitResponse.data.sha,
-      type: 'commit',
-      headers,
-    })
+    // const tagResponse = await octokit.request('POST /repos/{owner}/{repo}/git/tags', {
+    //   owner,
+    //   repo,
+    //   tag,
+    //   message: tag,
+    //   object: commitResponse.data.sha,
+    //   type: 'commit',
+    //   headers,
+    // })
 
-    if (debug) {
-      echo`${JSON.stringify(tagResponse.data, null, 2)}`
-    }
+    // if (debug) {
+    //   echo`${JSON.stringify(tagResponse.data, null, 2)}`
+    // }
     // Update Reference
     // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#update-a-reference
     const updateTagResponse = await octokit.request('POST /repos/{owner}/{repo}/git/refs', {

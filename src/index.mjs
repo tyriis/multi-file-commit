@@ -26,6 +26,7 @@ try {
     message
   )
   console.log(JSON.stringify({ result, context, branch, repo, message }, undefined, 2))
+  core.setOutput('sha', result.object?.sha)
 } catch (error) {
   core.setFailed(error.message)
 }

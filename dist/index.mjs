@@ -73006,6 +73006,7 @@ try {
     message
   )
   console.log(JSON.stringify({ result, context, branch, repo, message }, undefined, 2))
+  _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('sha', result.object?.sha)
 } catch (error) {
   _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message)
 }

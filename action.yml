@@ -21,6 +21,9 @@ inputs:
     description: >
       A list of files to commit, prevent other staged files to be commited
       Example: src/main.mjs,src/main.spec.js
+outputs:
+  sha:
+    description: The commit sha for further referencing in your workflow
 runs:
   using: node16
   main: dist/index.mjs

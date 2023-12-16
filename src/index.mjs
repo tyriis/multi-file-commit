@@ -27,7 +27,7 @@ try {
     message,
     tag
   )
-  console.log(JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2))
+  echo`${JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2)}`
   core.setOutput('sha', result.object?.sha)
 } catch (error) {
   core.setFailed(error.message)

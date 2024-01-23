@@ -6,6 +6,35 @@ import 'zx/globals'
 
 /* global $ */
 $.verbose = false
+const retryLimit = 10
+
+const getResult = async (context, token, branch, repo, files, message, tag, count) => {
+  if (!count) count = 0
+  try {
+    const result = await commit(
+      {
+        token,
+        branch,
+        owner: repo[0],
+        repo: repo[1],
+      },
+      files,
+      message,
+      tag
+    )
+    echo`${JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2)}`
+    return result
+  } catch (error) {
+    if (error.message === 'Update is not a fast forward' && count <= retryLimit ) {
+      count++
+      return await getResult(context, token, branch, repo, files, message, tag, count)
+    } else if (error.message === 'Update is not a fast forward') {
+      throw new Error('Update is not a fast forward, retry limit reached.')
+    } else {
+      throw error
+    }
+  }
+}
 
 try {
   const filesInput = core.getInput('files')
@@ -16,18 +45,7 @@ try {
   const branch = core.getInput('ref') || context.github.ref_name
   const tag = core.getInput('tag') || false
   const files = await getFiles(filesInput)
-  const result = await commit(
-    {
-      token,
-      branch,
-      owner: repo[0],
-      repo: repo[1],
-    },
-    files,
-    message,
-    tag
-  )
-  echo`${JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2)}`
+  const result = await getResult(context, token, branch, repo, files, message, tag)
   core.setOutput('sha', result.object?.sha)
 } catch (error) {
   core.setFailed(error.message)

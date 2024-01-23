@@ -47,7 +47,8 @@ Thanks for your work [Siddhartha Varma](https://github.com/BRO3886).
 
 ## Limitations
 
-:warning: the only limitation is that it can not be used on empty repositories.
+:warning: it cannot be used on empty repositories. \
+:warning: parallel commits on the same file lead to a race condition where previous changes are overwritten.
 
 ## What's new
 

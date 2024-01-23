@@ -74810,6 +74810,35 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 
 /* global $ */
 $.verbose = false
+const retryLimit = 10
+
+const getResult = async (context, token, branch, repo, files, message, tag, count) => {
+  if (!count) count = 0
+  try {
+    const result = await (0,_commit_mjs__WEBPACK_IMPORTED_MODULE_2__/* .commit */ .t)(
+      {
+        token,
+        branch,
+        owner: repo[0],
+        repo: repo[1],
+      },
+      files,
+      message,
+      tag
+    )
+    echo`${JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2)}`
+    return result
+  } catch (error) {
+    if (error.message === 'Update is not a fast forward' && count <= retryLimit ) {
+      count++
+      return await getResult(context, token, branch, repo, files, message, tag, count)
+    } else if (error.message === 'Update is not a fast forward') {
+      throw new Error('Update is not a fast forward, retry limit reached.')
+    } else {
+      throw error
+    }
+  }
+}
 
 try {
   const filesInput = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('files')
@@ -74820,18 +74849,7 @@ try {
   const branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('ref') || context.github.ref_name
   const tag = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('tag') || false
   const files = await (0,_get_files_mjs__WEBPACK_IMPORTED_MODULE_3__/* .getFiles */ .b)(filesInput)
-  const result = await (0,_commit_mjs__WEBPACK_IMPORTED_MODULE_2__/* .commit */ .t)(
-    {
-      token,
-      branch,
-      owner: repo[0],
-      repo: repo[1],
-    },
-    files,
-    message,
-    tag
-  )
-  echo`${JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2)}`
+  const result = await getResult(context, token, branch, repo, files, message, tag)
   _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput('sha', result.object?.sha)
 } catch (error) {
   _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message)

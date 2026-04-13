@@ -53,6 +53,8 @@ Thanks for your work [Siddhartha Varma](https://github.com/BRO3886).
 ## What's new
 
 - First implementation is currently tested
+- Runtime upgraded to Node 24 (GitHub Action runtime and package engine)
+- `zx` upgraded to latest major (8.x)
 
 ## Usage
 

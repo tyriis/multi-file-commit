@@ -4,7 +4,7 @@ import { commit } from './commit.mjs'
 import { getFiles } from './get-files.mjs'
 import 'zx/globals'
 
-/* global $ */
+/* global $, echo */
 $.verbose = false
 const retryLimit = 10
 
@@ -20,12 +20,12 @@ const getResult = async (context, token, branch, repo, files, message, tag, coun
       },
       files,
       message,
-      tag
+      tag,
     )
     echo`${JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2)}`
     return result
   } catch (error) {
-    if (error.message === 'Update is not a fast forward' && count <= retryLimit ) {
+    if (error.message === 'Update is not a fast forward' && count <= retryLimit) {
       count++
       return await getResult(context, token, branch, repo, files, message, tag, count)
     } else if (error.message === 'Update is not a fast forward') {

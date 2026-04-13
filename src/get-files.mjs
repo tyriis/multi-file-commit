@@ -26,8 +26,8 @@ export const getFiles = async (filesInput) => {
   const diff = await $`git status --short`
   const rows = `${diff}`.trim().split('\n')
   let files = []
-  for (let row of rows) {
-    let columns = row.split(' ').filter((item) => item !== '')
+  for (const row of rows) {
+    const columns = row.split(' ').filter((item) => item !== '')
     if (['A', 'M', 'AM'].indexOf(columns[0]) >= 0) {
       files.push(columns[1])
     }

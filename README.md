@@ -61,7 +61,7 @@ Thanks for your work [Siddhartha Varma](https://github.com/BRO3886).
 <!-- start usage -->
 
 ```yaml
-- uses: tyriis/multi-file-commit@v0.1.0
+- uses: tyriis/multi-file-commit@v1.0.0
   with:
     # Repository name with owner. For example, actions/checkout
     # Default: ${{ github.repository }}

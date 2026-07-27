@@ -1,5 +1,6 @@
 /* global $, echo */
 import 'zx/globals'
+import { readFile } from 'node:fs/promises'
 
 const debug = process.env.NODE_LOG_LEVEL === 'debug'
 
@@ -44,7 +45,7 @@ export const getFiles = async (filesInput) => {
   // extract required data for gh api
   const data = []
   for (const path of files) {
-    const content = await $`cat ${path}`
+    const raw = await readFile(path)
     let encoding
     // TODO: figure out how to handle this properly
     try {
@@ -61,7 +62,7 @@ export const getFiles = async (filesInput) => {
     const mode = await $`stat -c "%a" ${path}`
     const item = {
       path,
-      content: `${content}`,
+      content: raw.toString('utf-8'),
       encoding: mapEncoding(`${encoding}`.trim()),
       mode: `100${mode}`.trim(), // not sure is prefix is always 100
     }

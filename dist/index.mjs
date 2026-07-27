@@ -77424,14 +77424,22 @@ const commit = async (config, files, message, tag) => {
 
 /***/ }),
 
-/***/ 1031:
+/***/ 1315:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "b": () => (/* binding */ getFiles)
-/* harmony export */ });
-/* harmony import */ var zx_globals__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6220);
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "b": () => (/* binding */ getFiles)
+});
+
+// EXTERNAL MODULE: ./node_modules/.pnpm/zx@8.8.5/node_modules/zx/build/globals.js + 3 modules
+var globals = __nccwpck_require__(6220);
+;// CONCATENATED MODULE: external "node:fs/promises"
+const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
+;// CONCATENATED MODULE: ./src/get-files.mjs
 /* global $, echo */
+
 
 
 const debug = process.env.NODE_LOG_LEVEL === 'debug'
@@ -77477,7 +77485,7 @@ const getFiles = async (filesInput) => {
   // extract required data for gh api
   const data = []
   for (const path of files) {
-    const content = await $`cat ${path}`
+    const raw = await (0,promises_namespaceObject.readFile)(path)
     let encoding
     // TODO: figure out how to handle this properly
     try {
@@ -77494,7 +77502,7 @@ const getFiles = async (filesInput) => {
     const mode = await $`stat -c "%a" ${path}`
     const item = {
       path,
-      content: `${content}`,
+      content: raw.toString('utf-8'),
       encoding: mapEncoding(`${encoding}`.trim()),
       mode: `100${mode}`.trim(), // not sure is prefix is always 100
     }
@@ -77519,7 +77527,7 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(1035);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7352);
 /* harmony import */ var _commit_mjs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5057);
-/* harmony import */ var _get_files_mjs__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(1031);
+/* harmony import */ var _get_files_mjs__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(1315);
 /* harmony import */ var zx_globals__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(6220);
 
 

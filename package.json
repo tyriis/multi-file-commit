@@ -1,6 +1,6 @@
 {
   "name": "multi-file-commit",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
   "main": "src/index.mjs",
   "scripts": {
@@ -17,21 +17,21 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@actions/core": "^2.0.3",
-    "@actions/github": "^9.1.0",
-    "octokit": "^3.1.2",
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1",
+    "octokit": "^5.0.5",
     "zx": "^8.8.5"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.38.1",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
+    "@vercel/ncc": "^0.44.1",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.4.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "prettier": "^3.1.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-n": "^18.2.2",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-promise": "^7.3.0",
+    "prettier": "^3.9.6",
     "vitest": "^4.1.10"
   }
 }

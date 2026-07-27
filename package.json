@@ -5,7 +5,7 @@
   "main": "src/index.mjs",
   "scripts": {
     "build": "ncc build",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
     "lint": "eslint \"src/**/*.mjs\"",
     "lint:fix": "eslint \"src/**/*.mjs\" --fix"
   },
@@ -31,6 +31,7 @@
     "eslint-plugin-n": "^16.4.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
-    "prettier": "^3.1.1"
+    "prettier": "^3.1.1",
+    "vitest": "^4.1.10"
   }
 }

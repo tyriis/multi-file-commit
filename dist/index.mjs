@@ -68484,10 +68484,10 @@ const run = async (deps = {}) => {
   const commitFn = deps.commit || commit
 
   const filesInput = coreModule.getInput('files')
-  const repo = (coreModule.getInput('repository') || context.github.repository).split('/')
+  const repo = (coreModule.getInput('repository') || `${context.repo.owner}/${context.repo.repo}`).split('/')
   const token = coreModule.getInput('token')
   const message = coreModule.getInput('message')
-  const branch = coreModule.getInput('ref') || context.github.ref_name
+  const branch = coreModule.getInput('ref') || context.ref.replace(/^refs\/heads\//, '')
   const tag = coreModule.getInput('tag') || false
 
   const files = await getFilesFn(filesInput)

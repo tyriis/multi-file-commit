@@ -33,7 +33,13 @@ const baseHandlers = () => ({
   [R.tagCreate]: (params) => ({ data: { ref: params.ref, object: { sha: params.sha } } }),
 })
 
-const config = (client) => ({ token: 't', owner: 'o', repo: 'r', branch: 'main', client, sleep: async () => {} })
+const config = (client) => {
+  const sleepCalls = []
+  const sleep = async (ms) => {
+    sleepCalls.push(ms)
+  }
+  return { token: 't', owner: 'o', repo: 'r', branch: 'main', client, sleep, sleepCalls }
+}
 const makeFiles = () => [{ path: 'a.txt', mode: '100644' }]
 
 it('reads the ref first and builds tree and commit from the same sha', async () => {
@@ -73,7 +79,8 @@ const failFirstRefUpdate = (message) => {
 
 it('retries on a fast-forward 422 and rebuilds tree and commit on the new head', async () => {
   const { client, calls } = createClient(failFirstRefUpdate('Update is not a fast forward'))
-  const result = await commit(config(client), makeFiles(), 'msg', 'v1')
+  const cfg = config(client)
+  const result = await commit(cfg, makeFiles(), 'msg', 'v1')
   expect(calls.filter((call) => call.route === R.refUpdate)).toHaveLength(2)
   expect(calls.filter((call) => call.route === R.commitCreate).map((call) => call.params.parents)).toEqual([
     ['head-1'],
@@ -85,6 +92,10 @@ it('retries on a fast-forward 422 and rebuilds tree and commit on the new head',
   ])
   expect(calls.filter((call) => call.route === R.blobs)).toHaveLength(1)
   expect(calls.filter((call) => call.route === R.tagCreate)).toHaveLength(1)
+  expect(calls.find((call) => call.route === R.tagCreate).params.sha).toBe('commit-on-head-2')
+  expect(cfg.sleepCalls).toHaveLength(1)
+  expect(cfg.sleepCalls[0]).toBeGreaterThanOrEqual(250)
+  expect(cfg.sleepCalls[0]).toBeLessThan(500)
   expect(result.object.sha).toBe('commit-on-head-2')
 })
 
@@ -94,16 +105,46 @@ it('retries a concurrent-update 422', async () => {
   expect(calls.filter((call) => call.route === R.refUpdate)).toHaveLength(2)
 })
 
+it('converges on the third attempt when the ref keeps moving', async () => {
+  const handlers = baseHandlers()
+  const ok = handlers[R.refUpdate]
+  handlers[R.refUpdate] = (params, nth) => {
+    if (nth <= 2) throw conflict()
+    return ok(params, nth)
+  }
+  const { client, calls } = createClient(handlers)
+  const cfg = config(client)
+  const result = await commit(cfg, makeFiles(), 'msg', 'v1')
+  expect(calls.filter((call) => call.route === R.refUpdate)).toHaveLength(3)
+  expect(cfg.sleepCalls).toHaveLength(2)
+  expect(calls.filter((call) => call.route === R.commitCreate).map((call) => call.params.parents)).toEqual([
+    ['head-1'],
+    ['head-2'],
+    ['head-3'],
+  ])
+  expect(calls.filter((call) => call.route === R.blobs)).toHaveLength(1)
+  expect(calls.filter((call) => call.route === R.tagCreate)).toHaveLength(1)
+  expect(calls.find((call) => call.route === R.tagCreate).params.sha).toBe('commit-on-head-3')
+  expect(result.object.sha).toBe('commit-on-head-3')
+})
+
 it('throws after 5 conflicting attempts', async () => {
   const handlers = baseHandlers()
   handlers[R.refUpdate] = () => {
     throw conflict()
   }
   const { client, calls } = createClient(handlers)
-  const error = await commit(config(client), makeFiles(), 'msg').catch((thrown) => thrown)
+  const cfg = config(client)
+  const error = await commit(cfg, makeFiles(), 'msg').catch((thrown) => thrown)
   expect(error.message).toContain('Failed to update branch main after 5 attempts')
   expect(error.message).toContain('Update is not a fast forward')
   expect(calls.filter((call) => call.route === R.refUpdate)).toHaveLength(5)
+  // No sleep after the final attempt: only the 4 retries back off.
+  expect(cfg.sleepCalls).toHaveLength(4)
+  cfg.sleepCalls.forEach((ms, index) => {
+    expect(ms).toBeGreaterThanOrEqual(250 * (index + 1))
+    expect(ms).toBeLessThan(250 * (index + 1) + 250)
+  })
 })
 
 it('does not retry a protected-branch 422', async () => {

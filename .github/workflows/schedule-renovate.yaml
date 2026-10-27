@@ -39,7 +39,7 @@ jobs:
         id: generate-token
         with:
           client-id: "${{ secrets.BOT_APP_ID }}"
-          private_key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
 
       # https://github.com/marketplace/actions/checkout
       - name: Checkout

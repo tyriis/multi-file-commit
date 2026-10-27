@@ -1,0 +1,5 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  enabled: true,
+  extends: ["github>techtales-io/renovate-config:base.json5", "github>techtales-io/renovate-config:node.json5"],
+}

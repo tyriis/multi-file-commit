@@ -207,7 +207,7 @@ importers:
         specifier: 3.9.10
         version: 3.9.10
       vitest:
-        specifier: ^5.0.0
+        specifier: 5.0.5
         version: 5.0.5(vite@8.1.5)
 
 packages:

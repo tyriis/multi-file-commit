@@ -53586,15 +53586,52 @@ __reExport(vendor_exports, __nccwpck_require__(5513), module.exports);
 /***/ 1609:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
-  V4: () => (/* binding */ getInput),
-  C1: () => (/* binding */ setFailed),
-  uH: () => (/* binding */ setOutput)
+  ExitCode: () => (/* binding */ ExitCode),
+  addPath: () => (/* binding */ addPath),
+  debug: () => (/* binding */ debug),
+  endGroup: () => (/* binding */ endGroup),
+  error: () => (/* binding */ error),
+  exportVariable: () => (/* binding */ exportVariable),
+  getBooleanInput: () => (/* binding */ getBooleanInput),
+  getIDToken: () => (/* binding */ getIDToken),
+  getInput: () => (/* binding */ getInput),
+  getMultilineInput: () => (/* binding */ getMultilineInput),
+  getState: () => (/* binding */ getState),
+  group: () => (/* binding */ group),
+  info: () => (/* binding */ info),
+  isDebug: () => (/* binding */ isDebug),
+  markdownSummary: () => (/* reexport */ markdownSummary),
+  notice: () => (/* binding */ notice),
+  platform: () => (/* reexport */ platform_namespaceObject),
+  saveState: () => (/* binding */ saveState),
+  setCommandEcho: () => (/* binding */ setCommandEcho),
+  setFailed: () => (/* binding */ setFailed),
+  setOutput: () => (/* binding */ setOutput),
+  setSecret: () => (/* binding */ setSecret),
+  startGroup: () => (/* binding */ startGroup),
+  summary: () => (/* reexport */ summary),
+  toPlatformPath: () => (/* reexport */ toPlatformPath),
+  toPosixPath: () => (/* reexport */ toPosixPath),
+  toWin32Path: () => (/* reexport */ toWin32Path),
+  warning: () => (/* binding */ warning)
 });
 
-// UNUSED EXPORTS: ExitCode, addPath, debug, endGroup, error, exportVariable, getBooleanInput, getIDToken, getMultilineInput, getState, group, info, isDebug, markdownSummary, notice, platform, saveState, setCommandEcho, setSecret, startGroup, summary, toPlatformPath, toPosixPath, toWin32Path, warning
+// NAMESPACE OBJECT: ./node_modules/.pnpm/@actions+core@3.0.1/node_modules/@actions/core/lib/platform.js
+var platform_namespaceObject = {};
+__nccwpck_require__.r(platform_namespaceObject);
+__nccwpck_require__.d(platform_namespaceObject, {
+  arch: () => (arch),
+  getDetails: () => (getDetails),
+  isLinux: () => (isLinux),
+  isMacOS: () => (isMacOS),
+  isWindows: () => (isWindows),
+  platform: () => (platform)
+});
 
 // EXTERNAL MODULE: external "os"
 var external_os_ = __nccwpck_require__(857);
@@ -53605,7 +53642,7 @@ var external_os_ = __nccwpck_require__(857);
  * Sanitizes an input into a string so it can be passed into issueCommand safely
  * @param input input to sanitize into a string
  */
-function utils_toCommandValue(input) {
+function toCommandValue(input) {
     if (input === null || input === undefined) {
         return '';
     }
@@ -53620,7 +53657,7 @@ function utils_toCommandValue(input) {
  * @returns The command properties to send with the actual annotation command
  * See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
  */
-function utils_toCommandProperties(annotationProperties) {
+function toCommandProperties(annotationProperties) {
     if (!Object.keys(annotationProperties).length) {
         return {};
     }
@@ -53670,12 +53707,12 @@ function utils_toCommandProperties(annotationProperties) {
  * This is an internal utility function that powers the public API functions
  * such as setSecret, warning, error, and exportVariable.
  */
-function command_issueCommand(command, properties, message) {
+function issueCommand(command, properties, message) {
     const cmd = new Command(command, properties, message);
     process.stdout.write(cmd.toString() + external_os_.EOL);
 }
-function command_issue(name, message = '') {
-    command_issueCommand(name, {}, message);
+function issue(name, message = '') {
+    issueCommand(name, {}, message);
 }
 const CMD_STRING = '::';
 class Command {
@@ -53712,13 +53749,13 @@ class Command {
     }
 }
 function escapeData(s) {
-    return utils_toCommandValue(s)
+    return toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A');
 }
 function escapeProperty(s) {
-    return utils_toCommandValue(s)
+    return toCommandValue(s)
         .replace(/%/g, '%25')
         .replace(/\r/g, '%0D')
         .replace(/\n/g, '%0A')
@@ -53738,7 +53775,7 @@ var external_fs_ = __nccwpck_require__(9896);
 
 
 
-function file_command_issueFileCommand(command, message) {
+function issueFileCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
@@ -53746,13 +53783,13 @@ function file_command_issueFileCommand(command, message) {
     if (!external_fs_.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
     }
-    external_fs_.appendFileSync(filePath, `${utils_toCommandValue(message)}${external_os_.EOL}`, {
+    external_fs_.appendFileSync(filePath, `${toCommandValue(message)}${external_os_.EOL}`, {
         encoding: 'utf8'
     });
 }
-function file_command_prepareKeyValueMessage(key, value) {
+function prepareKeyValueMessage(key, value) {
     const delimiter = `ghadelimiter_${external_crypto_namespaceObject.randomUUID()}`;
-    const convertedValue = utils_toCommandValue(value);
+    const convertedValue = toCommandValue(value);
     // These should realistically never happen, but just in case someone finds a
     // way to exploit uuid generation let's not allow keys or values that contain
     // the delimiter.
@@ -53769,8 +53806,10 @@ function file_command_prepareKeyValueMessage(key, value) {
 var external_path_ = __nccwpck_require__(6928);
 // EXTERNAL MODULE: external "http"
 var external_http_ = __nccwpck_require__(8611);
+var external_http_namespaceObject = /*#__PURE__*/__nccwpck_require__.t(external_http_, 2);
 // EXTERNAL MODULE: external "https"
 var external_https_ = __nccwpck_require__(5692);
+var external_https_namespaceObject = /*#__PURE__*/__nccwpck_require__.t(external_https_, 2);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+http-client@4.0.1/node_modules/@actions/http-client/lib/proxy.js
 function getProxyUrl(reqUrl) {
     const usingSsl = reqUrl.protocol === 'https:';
@@ -53863,7 +53902,7 @@ class DecodedURL extends URL {
 }
 //# sourceMappingURL=proxy.js.map
 // EXTERNAL MODULE: ./node_modules/.pnpm/tunnel@0.0.6/node_modules/tunnel/index.js
-var node_modules_tunnel = __nccwpck_require__(7013);
+var tunnel = __nccwpck_require__(7013);
 // EXTERNAL MODULE: ./node_modules/.pnpm/undici@6.24.1/node_modules/undici/index.js
 var undici = __nccwpck_require__(4282);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+http-client@4.0.1/node_modules/@actions/http-client/lib/index.js
@@ -53941,7 +53980,7 @@ const HttpResponseRetryCodes = [
     HttpCodes.ServiceUnavailable,
     HttpCodes.GatewayTimeout
 ];
-const RetryableHttpVerbs = (/* unused pure expression or super */ null && (['OPTIONS', 'GET', 'DELETE', 'HEAD']));
+const RetryableHttpVerbs = ['OPTIONS', 'GET', 'DELETE', 'HEAD'];
 const ExponentialBackoffCeiling = 10;
 const ExponentialBackoffTimeSlice = 5;
 class HttpClientError extends Error {
@@ -53987,7 +54026,7 @@ function isHttps(requestUrl) {
     const parsedUrl = new URL(requestUrl);
     return parsedUrl.protocol === 'https:';
 }
-class lib_HttpClient {
+class HttpClient {
     constructor(userAgent, handlers, requestOptions) {
         this._ignoreSslError = false;
         this._allowRedirects = true;
@@ -54290,7 +54329,7 @@ class lib_HttpClient {
     }
     getAgentDispatcher(serverUrl) {
         const parsedUrl = new URL(serverUrl);
-        const proxyUrl = pm.getProxyUrl(parsedUrl);
+        const proxyUrl = getProxyUrl(parsedUrl);
         const useProxy = proxyUrl && proxyUrl.hostname;
         if (!useProxy) {
             return;
@@ -54301,7 +54340,7 @@ class lib_HttpClient {
         const info = {};
         info.parsedUrl = requestUrl;
         const usingSsl = info.parsedUrl.protocol === 'https:';
-        info.httpModule = usingSsl ? https : http;
+        info.httpModule = usingSsl ? external_https_namespaceObject : external_http_namespaceObject;
         const defaultPort = usingSsl ? 443 : 80;
         info.options = {};
         info.options.host = info.parsedUrl.hostname;
@@ -54400,7 +54439,7 @@ class lib_HttpClient {
     }
     _getAgent(parsedUrl) {
         let agent;
-        const proxyUrl = pm.getProxyUrl(parsedUrl);
+        const proxyUrl = getProxyUrl(parsedUrl);
         const useProxy = proxyUrl && proxyUrl.hostname;
         if (this._keepAlive && useProxy) {
             agent = this._proxyAgent;
@@ -54415,7 +54454,7 @@ class lib_HttpClient {
         const usingSsl = parsedUrl.protocol === 'https:';
         let maxSockets = 100;
         if (this.requestOptions) {
-            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
+            maxSockets = this.requestOptions.maxSockets || external_http_.globalAgent.maxSockets;
         }
         // This is `useProxy` again, but we need to check `proxyURl` directly for TypeScripts's flow analysis.
         if (proxyUrl && proxyUrl.hostname) {
@@ -54440,7 +54479,7 @@ class lib_HttpClient {
         // if tunneling agent isn't assigned create a new agent
         if (!agent) {
             const options = { keepAlive: this._keepAlive, maxSockets };
-            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
+            agent = usingSsl ? new external_https_.Agent(options) : new external_http_.Agent(options);
             this._agent = agent;
         }
         if (usingSsl && this._ignoreSslError) {
@@ -54463,7 +54502,7 @@ class lib_HttpClient {
             return proxyAgent;
         }
         const usingSsl = parsedUrl.protocol === 'https:';
-        proxyAgent = new ProxyAgent(Object.assign({ uri: proxyUrl.href, pipelining: !this._keepAlive ? 0 : 1 }, ((proxyUrl.username || proxyUrl.password) && {
+        proxyAgent = new undici.ProxyAgent(Object.assign({ uri: proxyUrl.href, pipelining: !this._keepAlive ? 0 : 1 }, ((proxyUrl.username || proxyUrl.password) && {
             token: `Basic ${Buffer.from(`${proxyUrl.username}:${proxyUrl.password}`).toString('base64')}`
         })));
         this._proxyAgentDispatcher = proxyAgent;
@@ -54594,7 +54633,7 @@ class BasicCredentialHandler {
         });
     }
 }
-class auth_BearerCredentialHandler {
+class BearerCredentialHandler {
     constructor(token) {
         this.token = token;
     }
@@ -54652,13 +54691,13 @@ var oidc_utils_awaiter = (undefined && undefined.__awaiter) || function (thisArg
 
 
 
-class oidc_utils_OidcClient {
+class OidcClient {
     static createHttpClient(allowRetry = true, maxRetry = 10) {
         const requestOptions = {
             allowRetries: allowRetry,
             maxRetries: maxRetry
         };
-        return new HttpClient('actions/oidc-client', [new BearerCredentialHandler(oidc_utils_OidcClient.getRequestToken())], requestOptions);
+        return new HttpClient('actions/oidc-client', [new BearerCredentialHandler(OidcClient.getRequestToken())], requestOptions);
     }
     static getRequestToken() {
         const token = process.env['ACTIONS_ID_TOKEN_REQUEST_TOKEN'];
@@ -54677,7 +54716,7 @@ class oidc_utils_OidcClient {
     static getCall(id_token_url) {
         return oidc_utils_awaiter(this, void 0, void 0, function* () {
             var _a;
-            const httpclient = oidc_utils_OidcClient.createHttpClient();
+            const httpclient = OidcClient.createHttpClient();
             const res = yield httpclient
                 .getJson(id_token_url)
                 .catch(error => {
@@ -54696,13 +54735,13 @@ class oidc_utils_OidcClient {
         return oidc_utils_awaiter(this, void 0, void 0, function* () {
             try {
                 // New ID Token is requested from action service
-                let id_token_url = oidc_utils_OidcClient.getIDTokenUrl();
+                let id_token_url = OidcClient.getIDTokenUrl();
                 if (audience) {
                     const encodedAudience = encodeURIComponent(audience);
                     id_token_url = `${id_token_url}&audience=${encodedAudience}`;
                 }
                 debug(`ID token url is ${id_token_url}`);
-                const id_token = yield oidc_utils_OidcClient.getCall(id_token_url);
+                const id_token = yield OidcClient.getCall(id_token_url);
                 setSecret(id_token);
                 return id_token;
             }
@@ -54991,8 +55030,8 @@ const _summary = new Summary();
 /**
  * @deprecated use `core.summary`
  */
-const markdownSummary = (/* unused pure expression or super */ null && (_summary));
-const summary = (/* unused pure expression or super */ null && (_summary));
+const markdownSummary = _summary;
+const summary = _summary;
 //# sourceMappingURL=summary.js.map
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+core@3.0.1/node_modules/@actions/core/lib/path-utils.js
 
@@ -55025,7 +55064,7 @@ function toWin32Path(pth) {
  * @return string The platform-specific path.
  */
 function toPlatformPath(pth) {
-    return pth.replace(/[/\\]/g, path.sep);
+    return pth.replace(/[/\\]/g, external_path_.sep);
 }
 //# sourceMappingURL=path-utils.js.map
 // EXTERNAL MODULE: external "string_decoder"
@@ -56100,16 +56139,16 @@ var exec_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
  * @param     options            optional exec options.  See ExecOptions
  * @returns   Promise<number>    exit code
  */
-function exec_exec(commandLine, args, options) {
+function exec(commandLine, args, options) {
     return exec_awaiter(this, void 0, void 0, function* () {
-        const commandArgs = tr.argStringToArray(commandLine);
+        const commandArgs = argStringToArray(commandLine);
         if (commandArgs.length === 0) {
             throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
         }
         // Path to tool to execute should be first arg
         const toolPath = commandArgs[0];
         args = commandArgs.slice(1).concat(args || []);
-        const runner = new tr.ToolRunner(toolPath, args, options);
+        const runner = new ToolRunner(toolPath, args, options);
         return runner.exec();
     });
 }
@@ -56129,8 +56168,8 @@ function getExecOutput(commandLine, args, options) {
         let stdout = '';
         let stderr = '';
         //Using string decoder covers the case where a mult-byte character is split
-        const stdoutDecoder = new StringDecoder('utf8');
-        const stderrDecoder = new StringDecoder('utf8');
+        const stdoutDecoder = new external_string_decoder_.StringDecoder('utf8');
+        const stderrDecoder = new external_string_decoder_.StringDecoder('utf8');
         const originalStdoutListener = (_a = options === null || options === void 0 ? void 0 : options.listeners) === null || _a === void 0 ? void 0 : _a.stdout;
         const originalStdErrListener = (_b = options === null || options === void 0 ? void 0 : options.listeners) === null || _b === void 0 ? void 0 : _b.stderr;
         const stdErrListener = (data) => {
@@ -56146,7 +56185,7 @@ function getExecOutput(commandLine, args, options) {
             }
         };
         const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
-        const exitCode = yield exec_exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+        const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
         //flush any remaining characters
         stdout += stdoutDecoder.end();
         stderr += stderrDecoder.end();
@@ -56171,10 +56210,10 @@ var platform_awaiter = (undefined && undefined.__awaiter) || function (thisArg, 
 
 
 const getWindowsInfo = () => platform_awaiter(void 0, void 0, void 0, function* () {
-    const { stdout: version } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', undefined, {
+    const { stdout: version } = yield getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', undefined, {
         silent: true
     });
-    const { stdout: name } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Caption"', undefined, {
+    const { stdout: name } = yield getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Caption"', undefined, {
         silent: true
     });
     return {
@@ -56184,7 +56223,7 @@ const getWindowsInfo = () => platform_awaiter(void 0, void 0, void 0, function* 
 });
 const getMacOsInfo = () => platform_awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
-    const { stdout } = yield exec.getExecOutput('sw_vers', undefined, {
+    const { stdout } = yield getExecOutput('sw_vers', undefined, {
         silent: true
     });
     const version = (_b = (_a = stdout.match(/ProductVersion:\s*(.+)/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : '';
@@ -56195,7 +56234,7 @@ const getMacOsInfo = () => platform_awaiter(void 0, void 0, void 0, function* ()
     };
 });
 const getLinuxInfo = () => platform_awaiter(void 0, void 0, void 0, function* () {
-    const { stdout } = yield exec.getExecOutput('lsb_release', ['-i', '-r', '-s'], {
+    const { stdout } = yield getExecOutput('lsb_release', ['-i', '-r', '-s'], {
         silent: true
     });
     const [name, version] = stdout.trim().split('\n');
@@ -56300,7 +56339,7 @@ function exportVariable(name, val) {
  * console.log(`Using token: ${apiToken}`); // Outputs: "Using token: ***"
  * ```
  */
-function core_setSecret(secret) {
+function setSecret(secret) {
     issueCommand('add-mask', {}, secret);
 }
 /**
@@ -56315,7 +56354,7 @@ function addPath(inputPath) {
     else {
         issueCommand('add-path', {}, inputPath);
     }
-    process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
+    process.env['PATH'] = `${inputPath}${external_path_.delimiter}${process.env['PATH']}`;
 }
 /**
  * Gets the value of an input.
@@ -56384,10 +56423,10 @@ function getBooleanInput(name, options) {
 function setOutput(name, value) {
     const filePath = process.env['GITHUB_OUTPUT'] || '';
     if (filePath) {
-        return file_command_issueFileCommand('OUTPUT', file_command_prepareKeyValueMessage(name, value));
+        return issueFileCommand('OUTPUT', prepareKeyValueMessage(name, value));
     }
     process.stdout.write(external_os_.EOL);
-    command_issueCommand('set-output', { name }, utils_toCommandValue(value));
+    issueCommand('set-output', { name }, toCommandValue(value));
 }
 /**
  * Enables or disables the echoing of commands into stdout for the rest of the step.
@@ -56422,7 +56461,7 @@ function isDebug() {
  * Writes debug message to user log
  * @param message debug message
  */
-function core_debug(message) {
+function debug(message) {
     issueCommand('debug', {}, message);
 }
 /**
@@ -56431,7 +56470,7 @@ function core_debug(message) {
  * @param properties optional properties to add to the annotation.
  */
 function error(message, properties = {}) {
-    command_issueCommand('error', utils_toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+    issueCommand('error', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 /**
  * Adds a warning issue
@@ -56454,7 +56493,7 @@ function notice(message, properties = {}) {
  * @param message info message
  */
 function info(message) {
-    process.stdout.write(message + os.EOL);
+    process.stdout.write(message + external_os_.EOL);
 }
 /**
  * Begin an output group.
@@ -56544,17 +56583,37 @@ function getIDToken(aud) {
 
 /***/ }),
 
-/***/ 5560:
+/***/ 96:
+/***/ ((__webpack_module__, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
+
+__nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(1609);
+/* harmony import */ var _run_mjs__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(3740);
+
+
+
+try {
+  await (0,_run_mjs__WEBPACK_IMPORTED_MODULE_1__/* .run */ .e)()
+} catch (error) {
+  _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message)
+}
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } }, 1);
+
+/***/ }),
+
+/***/ 3740:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
-  _: () => (/* binding */ github_context)
+  e: () => (/* binding */ run)
 });
 
-// UNUSED EXPORTS: getOctokit
-
+// EXTERNAL MODULE: ./node_modules/.pnpm/@actions+core@3.0.1/node_modules/@actions/core/lib/core.js + 16 modules
+var core = __nccwpck_require__(1609);
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __nccwpck_require__(9896);
 // EXTERNAL MODULE: external "os"
@@ -56669,145 +56728,166 @@ function getUserAgentWithOrchestrationId(baseUserAgent) {
     return baseUserAgent;
 }
 //# sourceMappingURL=utils.js.map
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+core@7.0.6/node_modules/@octokit/core/dist-src/index.js + 6 modules
-var dist_src = __nccwpck_require__(3460);
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/index.js + 3 modules
-var plugin_rest_endpoint_methods_dist_src = __nccwpck_require__(4071);
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-rest@14.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-paginate-rest/dist-bundle/index.js
-var dist_bundle = __nccwpck_require__(5888);
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+github@9.1.1/node_modules/@actions/github/lib/utils.js
-
-
-// octokit + plugins
-
-
-
-const context = new Context();
-const baseUrl = getApiBaseUrl();
-const defaults = {
-    baseUrl,
-    request: {
-        agent: getProxyAgent(baseUrl),
-        fetch: getProxyFetch(baseUrl)
-    }
-};
-const utils_GitHub = dist_src/* Octokit */.E.plugin(plugin_rest_endpoint_methods_dist_src/* restEndpointMethods */._, dist_bundle/* paginateRest */.ud).defaults(defaults);
-
-/**
- * Convience function to correctly format Octokit Options to pass into the constructor.
- *
- * @param     token    the repo PAT or GITHUB_TOKEN
- * @param     options  other options to set
- */
-function utils_getOctokitOptions(token, options) {
-    const opts = Object.assign({}, options || {}); // Shallow clone - don't mutate the object provided by the caller
-    // Auth
-    const auth = Utils.getAuthString(token, opts);
-    if (auth) {
-        opts.auth = auth;
-    }
-    // Orchestration ID
-    const userAgent = Utils.getUserAgentWithOrchestrationId(opts.userAgent);
-    if (userAgent) {
-        opts.userAgent = userAgent;
-    }
-    return opts;
-}
-//# sourceMappingURL=utils.js.map
-;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+github@9.1.1/node_modules/@actions/github/lib/github.js
-
-
-const github_context = new Context();
-/**
- * Returns a hydrated octokit ready to use for GitHub Actions
- *
- * @param     token    the repo PAT or GITHUB_TOKEN
- * @param     options  other options to set
- */
-function getOctokit(token, options, ...additionalPlugins) {
-    const GitHubWithPlugins = GitHub.plugin(...additionalPlugins);
-    return new GitHubWithPlugins(getOctokitOptions(token, options));
-}
-//# sourceMappingURL=github.js.map
-
-/***/ }),
-
-/***/ 4118:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   g: () => (/* binding */ createTokenAuth)
-/* harmony export */ });
-// pkg/dist-src/is-jwt.js
-var b64url = "(?:[a-zA-Z0-9_-]+)";
-var sep = "\\.";
-var jwtRE = new RegExp(`^${b64url}${sep}${b64url}${sep}${b64url}$`);
-var isJWT = jwtRE.test.bind(jwtRE);
-
-// pkg/dist-src/auth.js
-async function auth(token) {
-  const isApp = isJWT(token);
-  const isInstallation = token.startsWith("v1.") || token.startsWith("ghs_");
-  const isUserToServer = token.startsWith("ghu_");
-  const tokenType = isApp ? "app" : isInstallation ? "installation" : isUserToServer ? "user-to-server" : "oauth";
-  return {
-    type: "token",
-    token,
-    tokenType
-  };
-}
-
-// pkg/dist-src/with-authorization-prefix.js
-function withAuthorizationPrefix(token) {
-  if (token.split(/\./).length === 3) {
-    return `bearer ${token}`;
+;// CONCATENATED MODULE: ./node_modules/.pnpm/universal-user-agent@7.0.3/node_modules/universal-user-agent/index.js
+function getUserAgent() {
+  if (typeof navigator === "object" && "userAgent" in navigator) {
+    return navigator.userAgent;
   }
-  return `token ${token}`;
+
+  if (typeof process === "object" && process.version !== undefined) {
+    return `Node.js/${process.version.substr(1)} (${process.platform}; ${
+      process.arch
+    })`;
+  }
+
+  return "<environment undetectable>";
 }
 
-// pkg/dist-src/hook.js
-async function hook(token, request, route, parameters) {
-  const endpoint = request.endpoint.merge(
-    route,
-    parameters
-  );
-  endpoint.headers.authorization = withAuthorizationPrefix(token);
-  return request(endpoint);
-}
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/lib/register.js
+// @ts-check
 
-// pkg/dist-src/index.js
-var createTokenAuth = function createTokenAuth2(token) {
-  if (!token) {
-    throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
+function register(state, name, method, options) {
+  if (typeof method !== "function") {
+    throw new Error("method for before hook must be a function");
   }
-  if (typeof token !== "string") {
-    throw new Error(
-      "[@octokit/auth-token] Token passed to createTokenAuth is not a string"
-    );
+
+  if (!options) {
+    options = {};
   }
-  token = token.replace(/^(token|bearer) +/i, "");
-  return Object.assign(auth.bind(null, token), {
-    hook: hook.bind(null, token)
+
+  if (Array.isArray(name)) {
+    return name.reverse().reduce((callback, name) => {
+      return register.bind(null, state, name, callback, options);
+    }, method)();
+  }
+
+  return Promise.resolve().then(() => {
+    if (!state.registry[name]) {
+      return method(options);
+    }
+
+    return state.registry[name].reduce((method, registered) => {
+      return registered.hook.bind(null, method, options);
+    }, method)();
   });
-};
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/lib/add.js
+// @ts-check
+
+function addHook(state, kind, name, hook) {
+  const orig = hook;
+  if (!state.registry[name]) {
+    state.registry[name] = [];
+  }
+
+  if (kind === "before") {
+    hook = (method, options) => {
+      return Promise.resolve()
+        .then(orig.bind(null, options))
+        .then(method.bind(null, options));
+    };
+  }
+
+  if (kind === "after") {
+    hook = (method, options) => {
+      let result;
+      return Promise.resolve()
+        .then(method.bind(null, options))
+        .then((result_) => {
+          result = result_;
+          return orig(result, options);
+        })
+        .then(() => {
+          return result;
+        });
+    };
+  }
+
+  if (kind === "error") {
+    hook = (method, options) => {
+      return Promise.resolve()
+        .then(method.bind(null, options))
+        .catch((error) => {
+          return orig(error, options);
+        });
+    };
+  }
+
+  state.registry[name].push({
+    hook: hook,
+    orig: orig,
+  });
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/lib/remove.js
+// @ts-check
+
+function removeHook(state, name, method) {
+  if (!state.registry[name]) {
+    return;
+  }
+
+  const index = state.registry[name]
+    .map((registered) => {
+      return registered.orig;
+    })
+    .indexOf(method);
+
+  if (index === -1) {
+    return;
+  }
+
+  state.registry[name].splice(index, 1);
+}
+
+;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/index.js
+// @ts-check
 
 
 
-/***/ }),
-
-/***/ 3460:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
 
 
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  E: () => (/* binding */ Octokit)
-});
+// bind with array of arguments: https://stackoverflow.com/a/21792913
+const bind = Function.bind;
+const bindable = bind.bind(bind);
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/universal-user-agent@7.0.3/node_modules/universal-user-agent/index.js
-var universal_user_agent = __nccwpck_require__(5440);
-// EXTERNAL MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/index.js + 3 modules
-var before_after_hook = __nccwpck_require__(3912);
+function bindApi(hook, state, name) {
+  const removeHookRef = bindable(removeHook, null).apply(
+    null,
+    name ? [state, name] : [state]
+  );
+  hook.api = { remove: removeHookRef };
+  hook.remove = removeHookRef;
+  ["before", "error", "after", "wrap"].forEach((kind) => {
+    const args = name ? [state, kind, name] : [state, kind];
+    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args);
+  });
+}
+
+function Singular() {
+  const singularHookName = Symbol("Singular");
+  const singularHookState = {
+    registry: {},
+  };
+  const singularHook = register.bind(null, singularHookState, singularHookName);
+  bindApi(singularHook, singularHookState, singularHookName);
+  return singularHook;
+}
+
+function Collection() {
+  const state = {
+    registry: {},
+  };
+
+  const hook = register.bind(null, state);
+  bindApi(hook, state);
+
+  return hook;
+}
+
+/* harmony default export */ const before_after_hook = ({ Singular, Collection });
+
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+endpoint@11.0.3/node_modules/@octokit/endpoint/dist-bundle/index.js
 // pkg/dist-src/defaults.js
 
@@ -56816,7 +56896,7 @@ var before_after_hook = __nccwpck_require__(3912);
 var VERSION = "0.0.0-development";
 
 // pkg/dist-src/defaults.js
-var userAgent = `octokit-endpoint.js/${VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`;
+var userAgent = `octokit-endpoint.js/${VERSION} ${getUserAgent()}`;
 var DEFAULTS = {
   method: "GET",
   baseUrl: "https://api.github.com",
@@ -57427,7 +57507,7 @@ var dist_bundle_VERSION = "10.0.8";
 // pkg/dist-src/defaults.js
 var defaults_default = {
   headers: {
-    "user-agent": `octokit-request.js/${dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+    "user-agent": `octokit-request.js/${dist_bundle_VERSION} ${getUserAgent()}`
   }
 };
 
@@ -57731,7 +57811,7 @@ function graphql_dist_bundle_withDefaults(request2, newDefaults) {
 // pkg/dist-src/index.js
 var graphql2 = graphql_dist_bundle_withDefaults(request, {
   headers: {
-    "user-agent": `octokit-graphql.js/${graphql_dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+    "user-agent": `octokit-graphql.js/${graphql_dist_bundle_VERSION} ${getUserAgent()}`
   },
   method: "POST",
   url: "/graphql"
@@ -57744,8 +57824,61 @@ function withCustomRequest(customRequest) {
 }
 
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+auth-token@6.0.0/node_modules/@octokit/auth-token/dist-bundle/index.js
-var dist_bundle = __nccwpck_require__(4118);
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+auth-token@6.0.0/node_modules/@octokit/auth-token/dist-bundle/index.js
+// pkg/dist-src/is-jwt.js
+var b64url = "(?:[a-zA-Z0-9_-]+)";
+var sep = "\\.";
+var jwtRE = new RegExp(`^${b64url}${sep}${b64url}${sep}${b64url}$`);
+var isJWT = jwtRE.test.bind(jwtRE);
+
+// pkg/dist-src/auth.js
+async function auth(token) {
+  const isApp = isJWT(token);
+  const isInstallation = token.startsWith("v1.") || token.startsWith("ghs_");
+  const isUserToServer = token.startsWith("ghu_");
+  const tokenType = isApp ? "app" : isInstallation ? "installation" : isUserToServer ? "user-to-server" : "oauth";
+  return {
+    type: "token",
+    token,
+    tokenType
+  };
+}
+
+// pkg/dist-src/with-authorization-prefix.js
+function withAuthorizationPrefix(token) {
+  if (token.split(/\./).length === 3) {
+    return `bearer ${token}`;
+  }
+  return `token ${token}`;
+}
+
+// pkg/dist-src/hook.js
+async function hook(token, request, route, parameters) {
+  const endpoint = request.endpoint.merge(
+    route,
+    parameters
+  );
+  endpoint.headers.authorization = withAuthorizationPrefix(token);
+  return request(endpoint);
+}
+
+// pkg/dist-src/index.js
+var createTokenAuth = function createTokenAuth2(token) {
+  if (!token) {
+    throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
+  }
+  if (typeof token !== "string") {
+    throw new Error(
+      "[@octokit/auth-token] Token passed to createTokenAuth is not a string"
+    );
+  }
+  token = token.replace(/^(token|bearer) +/i, "");
+  return Object.assign(auth.bind(null, token), {
+    hook: hook.bind(null, token)
+  });
+};
+
+
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@7.0.6/node_modules/@octokit/core/dist-src/version.js
 const version_VERSION = "7.0.6";
 
@@ -57776,7 +57909,7 @@ function createLogger(logger = {}) {
   }
   return logger;
 }
-const userAgentTrail = `octokit-core.js/${version_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`;
+const userAgentTrail = `octokit-core.js/${version_VERSION} ${getUserAgent()}`;
 class Octokit {
   static VERSION = version_VERSION;
   static defaults(defaults) {
@@ -57818,7 +57951,7 @@ class Octokit {
     return NewOctokit;
   }
   constructor(options = {}) {
-    const hook = new before_after_hook/* default */.A.Collection();
+    const hook = new before_after_hook.Collection();
     const requestDefaults = {
       baseUrl: request.endpoint.DEFAULTS.baseUrl,
       headers: {},
@@ -57851,7 +57984,7 @@ class Octokit {
           type: "unauthenticated"
         });
       } else {
-        const auth = (0,dist_bundle/* createTokenAuth */.g)(options.auth);
+        const auth = createTokenAuth(options.auth);
         hook.wrap("request", auth.hook);
         this.auth = auth;
       }
@@ -57891,443 +58024,8 @@ class Octokit {
 }
 
 
-
-/***/ }),
-
-/***/ 5888:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   ud: () => (/* binding */ paginateRest)
-/* harmony export */ });
-/* unused harmony exports composePaginateRest, isPaginatingEndpoint, paginatingEndpoints */
-// pkg/dist-src/version.js
-var VERSION = "0.0.0-development";
-
-// pkg/dist-src/normalize-paginated-list-response.js
-function normalizePaginatedListResponse(response) {
-  if (!response.data) {
-    return {
-      ...response,
-      data: []
-    };
-  }
-  const responseNeedsNormalization = ("total_count" in response.data || "total_commits" in response.data) && !("url" in response.data);
-  if (!responseNeedsNormalization) return response;
-  const incompleteResults = response.data.incomplete_results;
-  const repositorySelection = response.data.repository_selection;
-  const totalCount = response.data.total_count;
-  const totalCommits = response.data.total_commits;
-  delete response.data.incomplete_results;
-  delete response.data.repository_selection;
-  delete response.data.total_count;
-  delete response.data.total_commits;
-  const namespaceKey = Object.keys(response.data)[0];
-  const data = response.data[namespaceKey];
-  response.data = data;
-  if (typeof incompleteResults !== "undefined") {
-    response.data.incomplete_results = incompleteResults;
-  }
-  if (typeof repositorySelection !== "undefined") {
-    response.data.repository_selection = repositorySelection;
-  }
-  response.data.total_count = totalCount;
-  response.data.total_commits = totalCommits;
-  return response;
-}
-
-// pkg/dist-src/iterator.js
-function iterator(octokit, route, parameters) {
-  const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
-  const requestMethod = typeof route === "function" ? route : octokit.request;
-  const method = options.method;
-  const headers = options.headers;
-  let url = options.url;
-  return {
-    [Symbol.asyncIterator]: () => ({
-      async next() {
-        if (!url) return { done: true };
-        try {
-          const response = await requestMethod({ method, url, headers });
-          const normalizedResponse = normalizePaginatedListResponse(response);
-          url = ((normalizedResponse.headers.link || "").match(
-            /<([^<>]+)>;\s*rel="next"/
-          ) || [])[1];
-          if (!url && "total_commits" in normalizedResponse.data) {
-            const parsedUrl = new URL(normalizedResponse.url);
-            const params = parsedUrl.searchParams;
-            const page = parseInt(params.get("page") || "1", 10);
-            const per_page = parseInt(params.get("per_page") || "250", 10);
-            if (page * per_page < normalizedResponse.data.total_commits) {
-              params.set("page", String(page + 1));
-              url = parsedUrl.toString();
-            }
-          }
-          return { value: normalizedResponse };
-        } catch (error) {
-          if (error.status !== 409) throw error;
-          url = "";
-          return {
-            value: {
-              status: 200,
-              headers: {},
-              data: []
-            }
-          };
-        }
-      }
-    })
-  };
-}
-
-// pkg/dist-src/paginate.js
-function paginate(octokit, route, parameters, mapFn) {
-  if (typeof parameters === "function") {
-    mapFn = parameters;
-    parameters = void 0;
-  }
-  return gather(
-    octokit,
-    [],
-    iterator(octokit, route, parameters)[Symbol.asyncIterator](),
-    mapFn
-  );
-}
-function gather(octokit, results, iterator2, mapFn) {
-  return iterator2.next().then((result) => {
-    if (result.done) {
-      return results;
-    }
-    let earlyExit = false;
-    function done() {
-      earlyExit = true;
-    }
-    results = results.concat(
-      mapFn ? mapFn(result.value, done) : result.value.data
-    );
-    if (earlyExit) {
-      return results;
-    }
-    return gather(octokit, results, iterator2, mapFn);
-  });
-}
-
-// pkg/dist-src/compose-paginate.js
-var composePaginateRest = Object.assign(paginate, {
-  iterator
-});
-
-// pkg/dist-src/generated/paginating-endpoints.js
-var paginatingEndpoints = (/* unused pure expression or super */ null && ([
-  "GET /advisories",
-  "GET /app/hook/deliveries",
-  "GET /app/installation-requests",
-  "GET /app/installations",
-  "GET /assignments/{assignment_id}/accepted_assignments",
-  "GET /classrooms",
-  "GET /classrooms/{classroom_id}/assignments",
-  "GET /enterprises/{enterprise}/code-security/configurations",
-  "GET /enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories",
-  "GET /enterprises/{enterprise}/dependabot/alerts",
-  "GET /enterprises/{enterprise}/teams",
-  "GET /enterprises/{enterprise}/teams/{enterprise-team}/memberships",
-  "GET /enterprises/{enterprise}/teams/{enterprise-team}/organizations",
-  "GET /events",
-  "GET /gists",
-  "GET /gists/public",
-  "GET /gists/starred",
-  "GET /gists/{gist_id}/comments",
-  "GET /gists/{gist_id}/commits",
-  "GET /gists/{gist_id}/forks",
-  "GET /installation/repositories",
-  "GET /issues",
-  "GET /licenses",
-  "GET /marketplace_listing/plans",
-  "GET /marketplace_listing/plans/{plan_id}/accounts",
-  "GET /marketplace_listing/stubbed/plans",
-  "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts",
-  "GET /networks/{owner}/{repo}/events",
-  "GET /notifications",
-  "GET /organizations",
-  "GET /organizations/{org}/dependabot/repository-access",
-  "GET /orgs/{org}/actions/cache/usage-by-repository",
-  "GET /orgs/{org}/actions/hosted-runners",
-  "GET /orgs/{org}/actions/permissions/repositories",
-  "GET /orgs/{org}/actions/permissions/self-hosted-runners/repositories",
-  "GET /orgs/{org}/actions/runner-groups",
-  "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/hosted-runners",
-  "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories",
-  "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners",
-  "GET /orgs/{org}/actions/runners",
-  "GET /orgs/{org}/actions/secrets",
-  "GET /orgs/{org}/actions/secrets/{secret_name}/repositories",
-  "GET /orgs/{org}/actions/variables",
-  "GET /orgs/{org}/actions/variables/{name}/repositories",
-  "GET /orgs/{org}/attestations/repositories",
-  "GET /orgs/{org}/attestations/{subject_digest}",
-  "GET /orgs/{org}/blocks",
-  "GET /orgs/{org}/campaigns",
-  "GET /orgs/{org}/code-scanning/alerts",
-  "GET /orgs/{org}/code-security/configurations",
-  "GET /orgs/{org}/code-security/configurations/{configuration_id}/repositories",
-  "GET /orgs/{org}/codespaces",
-  "GET /orgs/{org}/codespaces/secrets",
-  "GET /orgs/{org}/codespaces/secrets/{secret_name}/repositories",
-  "GET /orgs/{org}/copilot/billing/seats",
-  "GET /orgs/{org}/copilot/metrics",
-  "GET /orgs/{org}/dependabot/alerts",
-  "GET /orgs/{org}/dependabot/secrets",
-  "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories",
-  "GET /orgs/{org}/events",
-  "GET /orgs/{org}/failed_invitations",
-  "GET /orgs/{org}/hooks",
-  "GET /orgs/{org}/hooks/{hook_id}/deliveries",
-  "GET /orgs/{org}/insights/api/route-stats/{actor_type}/{actor_id}",
-  "GET /orgs/{org}/insights/api/subject-stats",
-  "GET /orgs/{org}/insights/api/user-stats/{user_id}",
-  "GET /orgs/{org}/installations",
-  "GET /orgs/{org}/invitations",
-  "GET /orgs/{org}/invitations/{invitation_id}/teams",
-  "GET /orgs/{org}/issues",
-  "GET /orgs/{org}/members",
-  "GET /orgs/{org}/members/{username}/codespaces",
-  "GET /orgs/{org}/migrations",
-  "GET /orgs/{org}/migrations/{migration_id}/repositories",
-  "GET /orgs/{org}/organization-roles/{role_id}/teams",
-  "GET /orgs/{org}/organization-roles/{role_id}/users",
-  "GET /orgs/{org}/outside_collaborators",
-  "GET /orgs/{org}/packages",
-  "GET /orgs/{org}/packages/{package_type}/{package_name}/versions",
-  "GET /orgs/{org}/personal-access-token-requests",
-  "GET /orgs/{org}/personal-access-token-requests/{pat_request_id}/repositories",
-  "GET /orgs/{org}/personal-access-tokens",
-  "GET /orgs/{org}/personal-access-tokens/{pat_id}/repositories",
-  "GET /orgs/{org}/private-registries",
-  "GET /orgs/{org}/projects",
-  "GET /orgs/{org}/projectsV2",
-  "GET /orgs/{org}/projectsV2/{project_number}/fields",
-  "GET /orgs/{org}/projectsV2/{project_number}/items",
-  "GET /orgs/{org}/properties/values",
-  "GET /orgs/{org}/public_members",
-  "GET /orgs/{org}/repos",
-  "GET /orgs/{org}/rulesets",
-  "GET /orgs/{org}/rulesets/rule-suites",
-  "GET /orgs/{org}/rulesets/{ruleset_id}/history",
-  "GET /orgs/{org}/secret-scanning/alerts",
-  "GET /orgs/{org}/security-advisories",
-  "GET /orgs/{org}/settings/immutable-releases/repositories",
-  "GET /orgs/{org}/settings/network-configurations",
-  "GET /orgs/{org}/team/{team_slug}/copilot/metrics",
-  "GET /orgs/{org}/teams",
-  "GET /orgs/{org}/teams/{team_slug}/discussions",
-  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments",
-  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions",
-  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions",
-  "GET /orgs/{org}/teams/{team_slug}/invitations",
-  "GET /orgs/{org}/teams/{team_slug}/members",
-  "GET /orgs/{org}/teams/{team_slug}/projects",
-  "GET /orgs/{org}/teams/{team_slug}/repos",
-  "GET /orgs/{org}/teams/{team_slug}/teams",
-  "GET /projects/{project_id}/collaborators",
-  "GET /repos/{owner}/{repo}/actions/artifacts",
-  "GET /repos/{owner}/{repo}/actions/caches",
-  "GET /repos/{owner}/{repo}/actions/organization-secrets",
-  "GET /repos/{owner}/{repo}/actions/organization-variables",
-  "GET /repos/{owner}/{repo}/actions/runners",
-  "GET /repos/{owner}/{repo}/actions/runs",
-  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
-  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
-  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
-  "GET /repos/{owner}/{repo}/actions/secrets",
-  "GET /repos/{owner}/{repo}/actions/variables",
-  "GET /repos/{owner}/{repo}/actions/workflows",
-  "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
-  "GET /repos/{owner}/{repo}/activity",
-  "GET /repos/{owner}/{repo}/assignees",
-  "GET /repos/{owner}/{repo}/attestations/{subject_digest}",
-  "GET /repos/{owner}/{repo}/branches",
-  "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
-  "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
-  "GET /repos/{owner}/{repo}/code-scanning/alerts",
-  "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
-  "GET /repos/{owner}/{repo}/code-scanning/analyses",
-  "GET /repos/{owner}/{repo}/codespaces",
-  "GET /repos/{owner}/{repo}/codespaces/devcontainers",
-  "GET /repos/{owner}/{repo}/codespaces/secrets",
-  "GET /repos/{owner}/{repo}/collaborators",
-  "GET /repos/{owner}/{repo}/comments",
-  "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions",
-  "GET /repos/{owner}/{repo}/commits",
-  "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments",
-  "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls",
-  "GET /repos/{owner}/{repo}/commits/{ref}/check-runs",
-  "GET /repos/{owner}/{repo}/commits/{ref}/check-suites",
-  "GET /repos/{owner}/{repo}/commits/{ref}/status",
-  "GET /repos/{owner}/{repo}/commits/{ref}/statuses",
-  "GET /repos/{owner}/{repo}/compare/{basehead}",
-  "GET /repos/{owner}/{repo}/compare/{base}...{head}",
-  "GET /repos/{owner}/{repo}/contributors",
-  "GET /repos/{owner}/{repo}/dependabot/alerts",
-  "GET /repos/{owner}/{repo}/dependabot/secrets",
-  "GET /repos/{owner}/{repo}/deployments",
-  "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
-  "GET /repos/{owner}/{repo}/environments",
-  "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
-  "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
-  "GET /repos/{owner}/{repo}/environments/{environment_name}/secrets",
-  "GET /repos/{owner}/{repo}/environments/{environment_name}/variables",
-  "GET /repos/{owner}/{repo}/events",
-  "GET /repos/{owner}/{repo}/forks",
-  "GET /repos/{owner}/{repo}/hooks",
-  "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
-  "GET /repos/{owner}/{repo}/invitations",
-  "GET /repos/{owner}/{repo}/issues",
-  "GET /repos/{owner}/{repo}/issues/comments",
-  "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
-  "GET /repos/{owner}/{repo}/issues/events",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/events",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/labels",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
-  "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline",
-  "GET /repos/{owner}/{repo}/keys",
-  "GET /repos/{owner}/{repo}/labels",
-  "GET /repos/{owner}/{repo}/milestones",
-  "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels",
-  "GET /repos/{owner}/{repo}/notifications",
-  "GET /repos/{owner}/{repo}/pages/builds",
-  "GET /repos/{owner}/{repo}/projects",
-  "GET /repos/{owner}/{repo}/pulls",
-  "GET /repos/{owner}/{repo}/pulls/comments",
-  "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
-  "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments",
-  "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits",
-  "GET /repos/{owner}/{repo}/pulls/{pull_number}/files",
-  "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews",
-  "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
-  "GET /repos/{owner}/{repo}/releases",
-  "GET /repos/{owner}/{repo}/releases/{release_id}/assets",
-  "GET /repos/{owner}/{repo}/releases/{release_id}/reactions",
-  "GET /repos/{owner}/{repo}/rules/branches/{branch}",
-  "GET /repos/{owner}/{repo}/rulesets",
-  "GET /repos/{owner}/{repo}/rulesets/rule-suites",
-  "GET /repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
-  "GET /repos/{owner}/{repo}/secret-scanning/alerts",
-  "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
-  "GET /repos/{owner}/{repo}/security-advisories",
-  "GET /repos/{owner}/{repo}/stargazers",
-  "GET /repos/{owner}/{repo}/subscribers",
-  "GET /repos/{owner}/{repo}/tags",
-  "GET /repos/{owner}/{repo}/teams",
-  "GET /repos/{owner}/{repo}/topics",
-  "GET /repositories",
-  "GET /search/code",
-  "GET /search/commits",
-  "GET /search/issues",
-  "GET /search/labels",
-  "GET /search/repositories",
-  "GET /search/topics",
-  "GET /search/users",
-  "GET /teams/{team_id}/discussions",
-  "GET /teams/{team_id}/discussions/{discussion_number}/comments",
-  "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions",
-  "GET /teams/{team_id}/discussions/{discussion_number}/reactions",
-  "GET /teams/{team_id}/invitations",
-  "GET /teams/{team_id}/members",
-  "GET /teams/{team_id}/projects",
-  "GET /teams/{team_id}/repos",
-  "GET /teams/{team_id}/teams",
-  "GET /user/blocks",
-  "GET /user/codespaces",
-  "GET /user/codespaces/secrets",
-  "GET /user/emails",
-  "GET /user/followers",
-  "GET /user/following",
-  "GET /user/gpg_keys",
-  "GET /user/installations",
-  "GET /user/installations/{installation_id}/repositories",
-  "GET /user/issues",
-  "GET /user/keys",
-  "GET /user/marketplace_purchases",
-  "GET /user/marketplace_purchases/stubbed",
-  "GET /user/memberships/orgs",
-  "GET /user/migrations",
-  "GET /user/migrations/{migration_id}/repositories",
-  "GET /user/orgs",
-  "GET /user/packages",
-  "GET /user/packages/{package_type}/{package_name}/versions",
-  "GET /user/public_emails",
-  "GET /user/repos",
-  "GET /user/repository_invitations",
-  "GET /user/social_accounts",
-  "GET /user/ssh_signing_keys",
-  "GET /user/starred",
-  "GET /user/subscriptions",
-  "GET /user/teams",
-  "GET /users",
-  "GET /users/{username}/attestations/{subject_digest}",
-  "GET /users/{username}/events",
-  "GET /users/{username}/events/orgs/{org}",
-  "GET /users/{username}/events/public",
-  "GET /users/{username}/followers",
-  "GET /users/{username}/following",
-  "GET /users/{username}/gists",
-  "GET /users/{username}/gpg_keys",
-  "GET /users/{username}/keys",
-  "GET /users/{username}/orgs",
-  "GET /users/{username}/packages",
-  "GET /users/{username}/projects",
-  "GET /users/{username}/projectsV2",
-  "GET /users/{username}/projectsV2/{project_number}/fields",
-  "GET /users/{username}/projectsV2/{project_number}/items",
-  "GET /users/{username}/received_events",
-  "GET /users/{username}/received_events/public",
-  "GET /users/{username}/repos",
-  "GET /users/{username}/social_accounts",
-  "GET /users/{username}/ssh_signing_keys",
-  "GET /users/{username}/starred",
-  "GET /users/{username}/subscriptions"
-]));
-
-// pkg/dist-src/paginating-endpoints.js
-function isPaginatingEndpoint(arg) {
-  if (typeof arg === "string") {
-    return paginatingEndpoints.includes(arg);
-  } else {
-    return false;
-  }
-}
-
-// pkg/dist-src/index.js
-function paginateRest(octokit) {
-  return {
-    paginate: Object.assign(paginate.bind(null, octokit), {
-      iterator: iterator.bind(null, octokit)
-    })
-  };
-}
-paginateRest.VERSION = VERSION;
-
-
-
-/***/ }),
-
-/***/ 4071:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  _: () => (/* binding */ restEndpointMethods)
-});
-
-// UNUSED EXPORTS: legacyRestEndpointMethods
-
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/version.js
-const VERSION = "17.0.0";
+const dist_src_version_VERSION = "17.0.0";
 
 //# sourceMappingURL=version.js.map
 
@@ -60760,7 +60458,7 @@ function restEndpointMethods(octokit) {
     rest: api
   };
 }
-restEndpointMethods.VERSION = VERSION;
+restEndpointMethods.VERSION = dist_src_version_VERSION;
 function legacyRestEndpointMethods(octokit) {
   const api = endpointsToMethods(octokit);
   return {
@@ -60768,197 +60466,476 @@ function legacyRestEndpointMethods(octokit) {
     rest: api
   };
 }
-legacyRestEndpointMethods.VERSION = VERSION;
+legacyRestEndpointMethods.VERSION = dist_src_version_VERSION;
 
 //# sourceMappingURL=index.js.map
 
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-rest@14.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-paginate-rest/dist-bundle/index.js
+// pkg/dist-src/version.js
+var plugin_paginate_rest_dist_bundle_VERSION = "0.0.0-development";
 
-/***/ }),
+// pkg/dist-src/normalize-paginated-list-response.js
+function normalizePaginatedListResponse(response) {
+  if (!response.data) {
+    return {
+      ...response,
+      data: []
+    };
+  }
+  const responseNeedsNormalization = ("total_count" in response.data || "total_commits" in response.data) && !("url" in response.data);
+  if (!responseNeedsNormalization) return response;
+  const incompleteResults = response.data.incomplete_results;
+  const repositorySelection = response.data.repository_selection;
+  const totalCount = response.data.total_count;
+  const totalCommits = response.data.total_commits;
+  delete response.data.incomplete_results;
+  delete response.data.repository_selection;
+  delete response.data.total_count;
+  delete response.data.total_commits;
+  const namespaceKey = Object.keys(response.data)[0];
+  const data = response.data[namespaceKey];
+  response.data = data;
+  if (typeof incompleteResults !== "undefined") {
+    response.data.incomplete_results = incompleteResults;
+  }
+  if (typeof repositorySelection !== "undefined") {
+    response.data.repository_selection = repositorySelection;
+  }
+  response.data.total_count = totalCount;
+  response.data.total_commits = totalCommits;
+  return response;
+}
 
-/***/ 3912:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+// pkg/dist-src/iterator.js
+function iterator(octokit, route, parameters) {
+  const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
+  const requestMethod = typeof route === "function" ? route : octokit.request;
+  const method = options.method;
+  const headers = options.headers;
+  let url = options.url;
+  return {
+    [Symbol.asyncIterator]: () => ({
+      async next() {
+        if (!url) return { done: true };
+        try {
+          const response = await requestMethod({ method, url, headers });
+          const normalizedResponse = normalizePaginatedListResponse(response);
+          url = ((normalizedResponse.headers.link || "").match(
+            /<([^<>]+)>;\s*rel="next"/
+          ) || [])[1];
+          if (!url && "total_commits" in normalizedResponse.data) {
+            const parsedUrl = new URL(normalizedResponse.url);
+            const params = parsedUrl.searchParams;
+            const page = parseInt(params.get("page") || "1", 10);
+            const per_page = parseInt(params.get("per_page") || "250", 10);
+            if (page * per_page < normalizedResponse.data.total_commits) {
+              params.set("page", String(page + 1));
+              url = parsedUrl.toString();
+            }
+          }
+          return { value: normalizedResponse };
+        } catch (error) {
+          if (error.status !== 409) throw error;
+          url = "";
+          return {
+            value: {
+              status: 200,
+              headers: {},
+              data: []
+            }
+          };
+        }
+      }
+    })
+  };
+}
 
+// pkg/dist-src/paginate.js
+function paginate(octokit, route, parameters, mapFn) {
+  if (typeof parameters === "function") {
+    mapFn = parameters;
+    parameters = void 0;
+  }
+  return gather(
+    octokit,
+    [],
+    iterator(octokit, route, parameters)[Symbol.asyncIterator](),
+    mapFn
+  );
+}
+function gather(octokit, results, iterator2, mapFn) {
+  return iterator2.next().then((result) => {
+    if (result.done) {
+      return results;
+    }
+    let earlyExit = false;
+    function done() {
+      earlyExit = true;
+    }
+    results = results.concat(
+      mapFn ? mapFn(result.value, done) : result.value.data
+    );
+    if (earlyExit) {
+      return results;
+    }
+    return gather(octokit, results, iterator2, mapFn);
+  });
+}
 
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  A: () => (/* binding */ before_after_hook)
+// pkg/dist-src/compose-paginate.js
+var composePaginateRest = Object.assign(paginate, {
+  iterator
 });
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/lib/register.js
-// @ts-check
+// pkg/dist-src/generated/paginating-endpoints.js
+var paginatingEndpoints = (/* unused pure expression or super */ null && ([
+  "GET /advisories",
+  "GET /app/hook/deliveries",
+  "GET /app/installation-requests",
+  "GET /app/installations",
+  "GET /assignments/{assignment_id}/accepted_assignments",
+  "GET /classrooms",
+  "GET /classrooms/{classroom_id}/assignments",
+  "GET /enterprises/{enterprise}/code-security/configurations",
+  "GET /enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories",
+  "GET /enterprises/{enterprise}/dependabot/alerts",
+  "GET /enterprises/{enterprise}/teams",
+  "GET /enterprises/{enterprise}/teams/{enterprise-team}/memberships",
+  "GET /enterprises/{enterprise}/teams/{enterprise-team}/organizations",
+  "GET /events",
+  "GET /gists",
+  "GET /gists/public",
+  "GET /gists/starred",
+  "GET /gists/{gist_id}/comments",
+  "GET /gists/{gist_id}/commits",
+  "GET /gists/{gist_id}/forks",
+  "GET /installation/repositories",
+  "GET /issues",
+  "GET /licenses",
+  "GET /marketplace_listing/plans",
+  "GET /marketplace_listing/plans/{plan_id}/accounts",
+  "GET /marketplace_listing/stubbed/plans",
+  "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts",
+  "GET /networks/{owner}/{repo}/events",
+  "GET /notifications",
+  "GET /organizations",
+  "GET /organizations/{org}/dependabot/repository-access",
+  "GET /orgs/{org}/actions/cache/usage-by-repository",
+  "GET /orgs/{org}/actions/hosted-runners",
+  "GET /orgs/{org}/actions/permissions/repositories",
+  "GET /orgs/{org}/actions/permissions/self-hosted-runners/repositories",
+  "GET /orgs/{org}/actions/runner-groups",
+  "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/hosted-runners",
+  "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories",
+  "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners",
+  "GET /orgs/{org}/actions/runners",
+  "GET /orgs/{org}/actions/secrets",
+  "GET /orgs/{org}/actions/secrets/{secret_name}/repositories",
+  "GET /orgs/{org}/actions/variables",
+  "GET /orgs/{org}/actions/variables/{name}/repositories",
+  "GET /orgs/{org}/attestations/repositories",
+  "GET /orgs/{org}/attestations/{subject_digest}",
+  "GET /orgs/{org}/blocks",
+  "GET /orgs/{org}/campaigns",
+  "GET /orgs/{org}/code-scanning/alerts",
+  "GET /orgs/{org}/code-security/configurations",
+  "GET /orgs/{org}/code-security/configurations/{configuration_id}/repositories",
+  "GET /orgs/{org}/codespaces",
+  "GET /orgs/{org}/codespaces/secrets",
+  "GET /orgs/{org}/codespaces/secrets/{secret_name}/repositories",
+  "GET /orgs/{org}/copilot/billing/seats",
+  "GET /orgs/{org}/copilot/metrics",
+  "GET /orgs/{org}/dependabot/alerts",
+  "GET /orgs/{org}/dependabot/secrets",
+  "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories",
+  "GET /orgs/{org}/events",
+  "GET /orgs/{org}/failed_invitations",
+  "GET /orgs/{org}/hooks",
+  "GET /orgs/{org}/hooks/{hook_id}/deliveries",
+  "GET /orgs/{org}/insights/api/route-stats/{actor_type}/{actor_id}",
+  "GET /orgs/{org}/insights/api/subject-stats",
+  "GET /orgs/{org}/insights/api/user-stats/{user_id}",
+  "GET /orgs/{org}/installations",
+  "GET /orgs/{org}/invitations",
+  "GET /orgs/{org}/invitations/{invitation_id}/teams",
+  "GET /orgs/{org}/issues",
+  "GET /orgs/{org}/members",
+  "GET /orgs/{org}/members/{username}/codespaces",
+  "GET /orgs/{org}/migrations",
+  "GET /orgs/{org}/migrations/{migration_id}/repositories",
+  "GET /orgs/{org}/organization-roles/{role_id}/teams",
+  "GET /orgs/{org}/organization-roles/{role_id}/users",
+  "GET /orgs/{org}/outside_collaborators",
+  "GET /orgs/{org}/packages",
+  "GET /orgs/{org}/packages/{package_type}/{package_name}/versions",
+  "GET /orgs/{org}/personal-access-token-requests",
+  "GET /orgs/{org}/personal-access-token-requests/{pat_request_id}/repositories",
+  "GET /orgs/{org}/personal-access-tokens",
+  "GET /orgs/{org}/personal-access-tokens/{pat_id}/repositories",
+  "GET /orgs/{org}/private-registries",
+  "GET /orgs/{org}/projects",
+  "GET /orgs/{org}/projectsV2",
+  "GET /orgs/{org}/projectsV2/{project_number}/fields",
+  "GET /orgs/{org}/projectsV2/{project_number}/items",
+  "GET /orgs/{org}/properties/values",
+  "GET /orgs/{org}/public_members",
+  "GET /orgs/{org}/repos",
+  "GET /orgs/{org}/rulesets",
+  "GET /orgs/{org}/rulesets/rule-suites",
+  "GET /orgs/{org}/rulesets/{ruleset_id}/history",
+  "GET /orgs/{org}/secret-scanning/alerts",
+  "GET /orgs/{org}/security-advisories",
+  "GET /orgs/{org}/settings/immutable-releases/repositories",
+  "GET /orgs/{org}/settings/network-configurations",
+  "GET /orgs/{org}/team/{team_slug}/copilot/metrics",
+  "GET /orgs/{org}/teams",
+  "GET /orgs/{org}/teams/{team_slug}/discussions",
+  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments",
+  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions",
+  "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions",
+  "GET /orgs/{org}/teams/{team_slug}/invitations",
+  "GET /orgs/{org}/teams/{team_slug}/members",
+  "GET /orgs/{org}/teams/{team_slug}/projects",
+  "GET /orgs/{org}/teams/{team_slug}/repos",
+  "GET /orgs/{org}/teams/{team_slug}/teams",
+  "GET /projects/{project_id}/collaborators",
+  "GET /repos/{owner}/{repo}/actions/artifacts",
+  "GET /repos/{owner}/{repo}/actions/caches",
+  "GET /repos/{owner}/{repo}/actions/organization-secrets",
+  "GET /repos/{owner}/{repo}/actions/organization-variables",
+  "GET /repos/{owner}/{repo}/actions/runners",
+  "GET /repos/{owner}/{repo}/actions/runs",
+  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts",
+  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs",
+  "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs",
+  "GET /repos/{owner}/{repo}/actions/secrets",
+  "GET /repos/{owner}/{repo}/actions/variables",
+  "GET /repos/{owner}/{repo}/actions/workflows",
+  "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs",
+  "GET /repos/{owner}/{repo}/activity",
+  "GET /repos/{owner}/{repo}/assignees",
+  "GET /repos/{owner}/{repo}/attestations/{subject_digest}",
+  "GET /repos/{owner}/{repo}/branches",
+  "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations",
+  "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs",
+  "GET /repos/{owner}/{repo}/code-scanning/alerts",
+  "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances",
+  "GET /repos/{owner}/{repo}/code-scanning/analyses",
+  "GET /repos/{owner}/{repo}/codespaces",
+  "GET /repos/{owner}/{repo}/codespaces/devcontainers",
+  "GET /repos/{owner}/{repo}/codespaces/secrets",
+  "GET /repos/{owner}/{repo}/collaborators",
+  "GET /repos/{owner}/{repo}/comments",
+  "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+  "GET /repos/{owner}/{repo}/commits",
+  "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments",
+  "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+  "GET /repos/{owner}/{repo}/commits/{ref}/check-runs",
+  "GET /repos/{owner}/{repo}/commits/{ref}/check-suites",
+  "GET /repos/{owner}/{repo}/commits/{ref}/status",
+  "GET /repos/{owner}/{repo}/commits/{ref}/statuses",
+  "GET /repos/{owner}/{repo}/compare/{basehead}",
+  "GET /repos/{owner}/{repo}/compare/{base}...{head}",
+  "GET /repos/{owner}/{repo}/contributors",
+  "GET /repos/{owner}/{repo}/dependabot/alerts",
+  "GET /repos/{owner}/{repo}/dependabot/secrets",
+  "GET /repos/{owner}/{repo}/deployments",
+  "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+  "GET /repos/{owner}/{repo}/environments",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/apps",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/secrets",
+  "GET /repos/{owner}/{repo}/environments/{environment_name}/variables",
+  "GET /repos/{owner}/{repo}/events",
+  "GET /repos/{owner}/{repo}/forks",
+  "GET /repos/{owner}/{repo}/hooks",
+  "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries",
+  "GET /repos/{owner}/{repo}/invitations",
+  "GET /repos/{owner}/{repo}/issues",
+  "GET /repos/{owner}/{repo}/issues/comments",
+  "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+  "GET /repos/{owner}/{repo}/issues/events",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/events",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/labels",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+  "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline",
+  "GET /repos/{owner}/{repo}/keys",
+  "GET /repos/{owner}/{repo}/labels",
+  "GET /repos/{owner}/{repo}/milestones",
+  "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels",
+  "GET /repos/{owner}/{repo}/notifications",
+  "GET /repos/{owner}/{repo}/pages/builds",
+  "GET /repos/{owner}/{repo}/projects",
+  "GET /repos/{owner}/{repo}/pulls",
+  "GET /repos/{owner}/{repo}/pulls/comments",
+  "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/files",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews",
+  "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments",
+  "GET /repos/{owner}/{repo}/releases",
+  "GET /repos/{owner}/{repo}/releases/{release_id}/assets",
+  "GET /repos/{owner}/{repo}/releases/{release_id}/reactions",
+  "GET /repos/{owner}/{repo}/rules/branches/{branch}",
+  "GET /repos/{owner}/{repo}/rulesets",
+  "GET /repos/{owner}/{repo}/rulesets/rule-suites",
+  "GET /repos/{owner}/{repo}/rulesets/{ruleset_id}/history",
+  "GET /repos/{owner}/{repo}/secret-scanning/alerts",
+  "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations",
+  "GET /repos/{owner}/{repo}/security-advisories",
+  "GET /repos/{owner}/{repo}/stargazers",
+  "GET /repos/{owner}/{repo}/subscribers",
+  "GET /repos/{owner}/{repo}/tags",
+  "GET /repos/{owner}/{repo}/teams",
+  "GET /repos/{owner}/{repo}/topics",
+  "GET /repositories",
+  "GET /search/code",
+  "GET /search/commits",
+  "GET /search/issues",
+  "GET /search/labels",
+  "GET /search/repositories",
+  "GET /search/topics",
+  "GET /search/users",
+  "GET /teams/{team_id}/discussions",
+  "GET /teams/{team_id}/discussions/{discussion_number}/comments",
+  "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions",
+  "GET /teams/{team_id}/discussions/{discussion_number}/reactions",
+  "GET /teams/{team_id}/invitations",
+  "GET /teams/{team_id}/members",
+  "GET /teams/{team_id}/projects",
+  "GET /teams/{team_id}/repos",
+  "GET /teams/{team_id}/teams",
+  "GET /user/blocks",
+  "GET /user/codespaces",
+  "GET /user/codespaces/secrets",
+  "GET /user/emails",
+  "GET /user/followers",
+  "GET /user/following",
+  "GET /user/gpg_keys",
+  "GET /user/installations",
+  "GET /user/installations/{installation_id}/repositories",
+  "GET /user/issues",
+  "GET /user/keys",
+  "GET /user/marketplace_purchases",
+  "GET /user/marketplace_purchases/stubbed",
+  "GET /user/memberships/orgs",
+  "GET /user/migrations",
+  "GET /user/migrations/{migration_id}/repositories",
+  "GET /user/orgs",
+  "GET /user/packages",
+  "GET /user/packages/{package_type}/{package_name}/versions",
+  "GET /user/public_emails",
+  "GET /user/repos",
+  "GET /user/repository_invitations",
+  "GET /user/social_accounts",
+  "GET /user/ssh_signing_keys",
+  "GET /user/starred",
+  "GET /user/subscriptions",
+  "GET /user/teams",
+  "GET /users",
+  "GET /users/{username}/attestations/{subject_digest}",
+  "GET /users/{username}/events",
+  "GET /users/{username}/events/orgs/{org}",
+  "GET /users/{username}/events/public",
+  "GET /users/{username}/followers",
+  "GET /users/{username}/following",
+  "GET /users/{username}/gists",
+  "GET /users/{username}/gpg_keys",
+  "GET /users/{username}/keys",
+  "GET /users/{username}/orgs",
+  "GET /users/{username}/packages",
+  "GET /users/{username}/projects",
+  "GET /users/{username}/projectsV2",
+  "GET /users/{username}/projectsV2/{project_number}/fields",
+  "GET /users/{username}/projectsV2/{project_number}/items",
+  "GET /users/{username}/received_events",
+  "GET /users/{username}/received_events/public",
+  "GET /users/{username}/repos",
+  "GET /users/{username}/social_accounts",
+  "GET /users/{username}/ssh_signing_keys",
+  "GET /users/{username}/starred",
+  "GET /users/{username}/subscriptions"
+]));
 
-function register(state, name, method, options) {
-  if (typeof method !== "function") {
-    throw new Error("method for before hook must be a function");
+// pkg/dist-src/paginating-endpoints.js
+function isPaginatingEndpoint(arg) {
+  if (typeof arg === "string") {
+    return paginatingEndpoints.includes(arg);
+  } else {
+    return false;
   }
-
-  if (!options) {
-    options = {};
-  }
-
-  if (Array.isArray(name)) {
-    return name.reverse().reduce((callback, name) => {
-      return register.bind(null, state, name, callback, options);
-    }, method)();
-  }
-
-  return Promise.resolve().then(() => {
-    if (!state.registry[name]) {
-      return method(options);
-    }
-
-    return state.registry[name].reduce((method, registered) => {
-      return registered.hook.bind(null, method, options);
-    }, method)();
-  });
 }
 
-;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/lib/add.js
-// @ts-check
-
-function addHook(state, kind, name, hook) {
-  const orig = hook;
-  if (!state.registry[name]) {
-    state.registry[name] = [];
-  }
-
-  if (kind === "before") {
-    hook = (method, options) => {
-      return Promise.resolve()
-        .then(orig.bind(null, options))
-        .then(method.bind(null, options));
-    };
-  }
-
-  if (kind === "after") {
-    hook = (method, options) => {
-      let result;
-      return Promise.resolve()
-        .then(method.bind(null, options))
-        .then((result_) => {
-          result = result_;
-          return orig(result, options);
-        })
-        .then(() => {
-          return result;
-        });
-    };
-  }
-
-  if (kind === "error") {
-    hook = (method, options) => {
-      return Promise.resolve()
-        .then(method.bind(null, options))
-        .catch((error) => {
-          return orig(error, options);
-        });
-    };
-  }
-
-  state.registry[name].push({
-    hook: hook,
-    orig: orig,
-  });
-}
-
-;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/lib/remove.js
-// @ts-check
-
-function removeHook(state, name, method) {
-  if (!state.registry[name]) {
-    return;
-  }
-
-  const index = state.registry[name]
-    .map((registered) => {
-      return registered.orig;
+// pkg/dist-src/index.js
+function paginateRest(octokit) {
+  return {
+    paginate: Object.assign(paginate.bind(null, octokit), {
+      iterator: iterator.bind(null, octokit)
     })
-    .indexOf(method);
-
-  if (index === -1) {
-    return;
-  }
-
-  state.registry[name].splice(index, 1);
-}
-
-;// CONCATENATED MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/index.js
-// @ts-check
-
-
-
-
-
-// bind with array of arguments: https://stackoverflow.com/a/21792913
-const bind = Function.bind;
-const bindable = bind.bind(bind);
-
-function bindApi(hook, state, name) {
-  const removeHookRef = bindable(removeHook, null).apply(
-    null,
-    name ? [state, name] : [state]
-  );
-  hook.api = { remove: removeHookRef };
-  hook.remove = removeHookRef;
-  ["before", "error", "after", "wrap"].forEach((kind) => {
-    const args = name ? [state, kind, name] : [state, kind];
-    hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args);
-  });
-}
-
-function Singular() {
-  const singularHookName = Symbol("Singular");
-  const singularHookState = {
-    registry: {},
   };
-  const singularHook = register.bind(null, singularHookState, singularHookName);
-  bindApi(singularHook, singularHookState, singularHookName);
-  return singularHook;
 }
+paginateRest.VERSION = plugin_paginate_rest_dist_bundle_VERSION;
 
-function Collection() {
-  const state = {
-    registry: {},
-  };
 
-  const hook = register.bind(null, state);
-  bindApi(hook, state);
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+github@9.1.1/node_modules/@actions/github/lib/utils.js
 
-  return hook;
+
+// octokit + plugins
+
+
+
+const context = new Context();
+const baseUrl = getApiBaseUrl();
+const defaults = {
+    baseUrl,
+    request: {
+        agent: getProxyAgent(baseUrl),
+        fetch: getProxyFetch(baseUrl)
+    }
+};
+const utils_GitHub = Octokit.plugin(restEndpointMethods, paginateRest).defaults(defaults);
+
+/**
+ * Convience function to correctly format Octokit Options to pass into the constructor.
+ *
+ * @param     token    the repo PAT or GITHUB_TOKEN
+ * @param     options  other options to set
+ */
+function utils_getOctokitOptions(token, options) {
+    const opts = Object.assign({}, options || {}); // Shallow clone - don't mutate the object provided by the caller
+    // Auth
+    const auth = Utils.getAuthString(token, opts);
+    if (auth) {
+        opts.auth = auth;
+    }
+    // Orchestration ID
+    const userAgent = Utils.getUserAgentWithOrchestrationId(opts.userAgent);
+    if (userAgent) {
+        opts.userAgent = userAgent;
+    }
+    return opts;
 }
+//# sourceMappingURL=utils.js.map
+;// CONCATENATED MODULE: ./node_modules/.pnpm/@actions+github@9.1.1/node_modules/@actions/github/lib/github.js
 
-/* harmony default export */ const before_after_hook = ({ Singular, Collection });
 
-
-/***/ }),
-
-/***/ 5440:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   $: () => (/* binding */ getUserAgent)
-/* harmony export */ });
-function getUserAgent() {
-  if (typeof navigator === "object" && "userAgent" in navigator) {
-    return navigator.userAgent;
-  }
-
-  if (typeof process === "object" && process.version !== undefined) {
-    return `Node.js/${process.version.substr(1)} (${process.platform}; ${
-      process.arch
-    })`;
-  }
-
-  return "<environment undetectable>";
+const github_context = new Context();
+/**
+ * Returns a hydrated octokit ready to use for GitHub Actions
+ *
+ * @param     token    the repo PAT or GITHUB_TOKEN
+ * @param     options  other options to set
+ */
+function getOctokit(token, options, ...additionalPlugins) {
+    const GitHubWithPlugins = GitHub.plugin(...additionalPlugins);
+    return new GitHubWithPlugins(getOctokitOptions(token, options));
 }
-
-
-/***/ }),
-
-/***/ 8267:
-/***/ ((__unused_webpack___webpack_module__, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
-
-
+//# sourceMappingURL=github.js.map
 ;// CONCATENATED MODULE: external "node:module"
 const external_node_module_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:module");
 ;// CONCATENATED MODULE: external "node:process"
@@ -60995,24 +60972,6 @@ const {
 
 
 
-
-/***/ }),
-
-/***/ 4819:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  c: () => (/* binding */ commit)
-});
-
-// EXTERNAL MODULE: ./node_modules/.pnpm/zx@8.8.5/node_modules/zx/build/globals.js + 3 modules
-var globals = __nccwpck_require__(8267);
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+core@7.0.6/node_modules/@octokit/core/dist-src/index.js + 6 modules
-var dist_src = __nccwpck_require__(3460);
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-rest@14.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-paginate-rest/dist-bundle/index.js
-var dist_bundle = __nccwpck_require__(5888);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-graphql@6.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-paginate-graphql/dist-bundle/index.js
 // pkg/dist-src/errors.js
 var generateMessage = (path, cursorValue) => `The cursor at "${path.join(
@@ -61179,7 +61138,7 @@ var createPaginate = (octokit) => {
 };
 
 // pkg/dist-src/version.js
-var VERSION = "0.0.0-development";
+var plugin_paginate_graphql_dist_bundle_VERSION = "0.0.0-development";
 
 // pkg/dist-src/index.js
 function paginateGraphQL(octokit) {
@@ -61193,12 +61152,10 @@ function paginateGraphQL(octokit) {
 }
 
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+plugin-rest-endpoint-methods@17.0.0_@octokit+core@7.0.6/node_modules/@octokit/plugin-rest-endpoint-methods/dist-src/index.js + 3 modules
-var plugin_rest_endpoint_methods_dist_src = __nccwpck_require__(4071);
 // EXTERNAL MODULE: ./node_modules/.pnpm/bottleneck@2.19.5/node_modules/bottleneck/light.js
 var light = __nccwpck_require__(2384);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+request-error@7.1.2/node_modules/@octokit/request-error/dist-src/index.js
-class RequestError extends Error {
+class dist_src_RequestError extends Error {
   name;
   /**
    * http status code
@@ -61240,7 +61197,7 @@ class RequestError extends Error {
 
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-retry@8.1.1_@octokit+core@7.0.6/node_modules/@octokit/plugin-retry/dist-bundle/index.js
 // pkg/dist-src/version.js
-var dist_bundle_VERSION = "0.0.0-development";
+var plugin_retry_dist_bundle_VERSION = "0.0.0-development";
 
 // pkg/dist-src/error-request.js
 function isRequestError(error) {
@@ -61281,7 +61238,7 @@ async function requestWithGraphqlErrorHandling(state, octokit, request, options)
   if (response.data && response.data.errors && response.data.errors.length > 0 && /Something went wrong while executing your query/.test(
     response.data.errors[0].message
   )) {
-    const error = new RequestError(response.data.errors[0].message, 500, {
+    const error = new dist_src_RequestError(response.data.errors[0].message, 500, {
       request: options,
       response
     });
@@ -61318,7 +61275,7 @@ function retry(octokit, octokitOptions) {
   }
   return retryPlugin;
 }
-retry.VERSION = dist_bundle_VERSION;
+retry.VERSION = plugin_retry_dist_bundle_VERSION;
 
 
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-throttling@11.0.5_@octokit+core@7.0.6/node_modules/@octokit/plugin-throttling/dist-bundle/index.js
@@ -61329,7 +61286,7 @@ retry.VERSION = dist_bundle_VERSION;
 var plugin_throttling_dist_bundle_VERSION = "0.0.0-development";
 
 // pkg/dist-src/wrap-request.js
-var noop = () => Promise.resolve();
+var dist_bundle_noop = () => Promise.resolve();
 function dist_bundle_wrapRequest(state, request, options) {
   return state.retryLimiter.schedule(doRequest, state, request, options);
 }
@@ -61345,13 +61302,13 @@ async function doRequest(state, request, options) {
     jobOptions.expiration = 1e3 * 60;
   }
   if (isWrite || isGraphQL) {
-    await state.write.key(state.id).schedule(jobOptions, noop);
+    await state.write.key(state.id).schedule(jobOptions, dist_bundle_noop);
   }
   if (isWrite && state.triggersNotification(pathname)) {
-    await state.notifications.key(state.id).schedule(jobOptions, noop);
+    await state.notifications.key(state.id).schedule(jobOptions, dist_bundle_noop);
   }
   if (isSearch) {
-    await state.search.key(state.id).schedule(jobOptions, noop);
+    await state.search.key(state.id).schedule(jobOptions, dist_bundle_noop);
   }
   const req = (isAuth ? state.auth : state.global).key(state.id).schedule(jobOptions, request, options);
   if (isGraphQL) {
@@ -61563,10 +61520,6 @@ throttling.VERSION = plugin_throttling_dist_bundle_VERSION;
 throttling.triggersNotification = triggersNotification;
 
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/universal-user-agent@7.0.3/node_modules/universal-user-agent/index.js
-var universal_user_agent = __nccwpck_require__(5440);
-// EXTERNAL MODULE: ./node_modules/.pnpm/before-after-hook@4.0.0/node_modules/before-after-hook/index.js + 3 modules
-var before_after_hook = __nccwpck_require__(3912);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+endpoint@11.0.5/node_modules/@octokit/endpoint/dist-bundle/index.js
 // pkg/dist-src/defaults.js
 
@@ -61575,13 +61528,13 @@ var before_after_hook = __nccwpck_require__(3912);
 var endpoint_dist_bundle_VERSION = "0.0.0-development";
 
 // pkg/dist-src/defaults.js
-var userAgent = `octokit-endpoint.js/${endpoint_dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`;
-var DEFAULTS = {
+var dist_bundle_userAgent = `octokit-endpoint.js/${endpoint_dist_bundle_VERSION} ${getUserAgent()}`;
+var dist_bundle_DEFAULTS = {
   method: "GET",
   baseUrl: "https://api.github.com",
   headers: {
     accept: "application/vnd.github.v3+json",
-    "user-agent": userAgent
+    "user-agent": dist_bundle_userAgent
   },
   mediaType: {
     format: ""
@@ -61589,7 +61542,7 @@ var DEFAULTS = {
 };
 
 // pkg/dist-src/util/lowercase-keys.js
-function lowercaseKeys(object) {
+function dist_bundle_lowercaseKeys(object) {
   if (!object) {
     return {};
   }
@@ -61600,7 +61553,7 @@ function lowercaseKeys(object) {
 }
 
 // pkg/dist-src/util/is-plain-object.js
-function isPlainObject(value) {
+function endpoint_dist_bundle_isPlainObject(value) {
   if (typeof value !== "object" || value === null) return false;
   if (Object.prototype.toString.call(value) !== "[object Object]") return false;
   const proto = Object.getPrototypeOf(value);
@@ -61610,12 +61563,12 @@ function isPlainObject(value) {
 }
 
 // pkg/dist-src/util/merge-deep.js
-function mergeDeep(defaults, options) {
+function dist_bundle_mergeDeep(defaults, options) {
   const result = Object.assign({}, defaults);
   Object.keys(options).forEach((key) => {
-    if (isPlainObject(options[key])) {
+    if (endpoint_dist_bundle_isPlainObject(options[key])) {
       if (!(key in defaults)) Object.assign(result, { [key]: options[key] });
-      else result[key] = mergeDeep(defaults[key], options[key]);
+      else result[key] = dist_bundle_mergeDeep(defaults[key], options[key]);
     } else {
       Object.assign(result, { [key]: options[key] });
     }
@@ -61624,7 +61577,7 @@ function mergeDeep(defaults, options) {
 }
 
 // pkg/dist-src/util/remove-undefined-properties.js
-function removeUndefinedProperties(obj) {
+function dist_bundle_removeUndefinedProperties(obj) {
   for (const key in obj) {
     if (obj[key] === void 0) {
       delete obj[key];
@@ -61634,17 +61587,17 @@ function removeUndefinedProperties(obj) {
 }
 
 // pkg/dist-src/merge.js
-function merge(defaults, route, options) {
+function dist_bundle_merge(defaults, route, options) {
   if (typeof route === "string") {
     let [method, url] = route.split(" ");
     options = Object.assign(url ? { method, url } : { url: method }, options);
   } else {
     options = Object.assign({}, route);
   }
-  options.headers = lowercaseKeys(options.headers);
-  removeUndefinedProperties(options);
-  removeUndefinedProperties(options.headers);
-  const mergedOptions = mergeDeep(defaults || {}, options);
+  options.headers = dist_bundle_lowercaseKeys(options.headers);
+  dist_bundle_removeUndefinedProperties(options);
+  dist_bundle_removeUndefinedProperties(options.headers);
+  const mergedOptions = dist_bundle_mergeDeep(defaults || {}, options);
   if (options.url === "/graphql") {
     if (defaults && defaults.mediaType.previews?.length) {
       mergedOptions.mediaType.previews = defaults.mediaType.previews.filter(
@@ -61657,7 +61610,7 @@ function merge(defaults, route, options) {
 }
 
 // pkg/dist-src/util/add-query-parameters.js
-function addQueryParameters(url, parameters) {
+function dist_bundle_addQueryParameters(url, parameters) {
   const separator = /\?/.test(url) ? "&" : "?";
   const names = Object.keys(parameters);
   if (names.length === 0) {
@@ -61672,20 +61625,20 @@ function addQueryParameters(url, parameters) {
 }
 
 // pkg/dist-src/util/extract-url-variable-names.js
-var urlVariableRegex = /\{[^{}}]+\}/g;
-function removeNonChars(variableName) {
+var dist_bundle_urlVariableRegex = /\{[^{}}]+\}/g;
+function dist_bundle_removeNonChars(variableName) {
   return variableName.replace(/(?:^\W+)|(?:(?<!\W)\W+$)/g, "").split(/,/);
 }
-function extractUrlVariableNames(url) {
-  const matches = url.match(urlVariableRegex);
+function dist_bundle_extractUrlVariableNames(url) {
+  const matches = url.match(dist_bundle_urlVariableRegex);
   if (!matches) {
     return [];
   }
-  return matches.map(removeNonChars).reduce((a, b) => a.concat(b), []);
+  return matches.map(dist_bundle_removeNonChars).reduce((a, b) => a.concat(b), []);
 }
 
 // pkg/dist-src/util/omit.js
-function omit(object, keysToOmit) {
+function dist_bundle_omit(object, keysToOmit) {
   const result = { __proto__: null };
   for (const key of Object.keys(object)) {
     if (keysToOmit.indexOf(key) === -1) {
@@ -61696,7 +61649,7 @@ function omit(object, keysToOmit) {
 }
 
 // pkg/dist-src/util/url-template.js
-function encodeReserved(str) {
+function dist_bundle_encodeReserved(str) {
   return str.split(/(%[0-9A-Fa-f]{2})/g).map(function(part) {
     if (!/%[0-9A-Fa-f]/.test(part)) {
       part = encodeURI(part).replace(/%5B/g, "[").replace(/%5D/g, "]");
@@ -61704,67 +61657,67 @@ function encodeReserved(str) {
     return part;
   }).join("");
 }
-function encodeUnreserved(str) {
+function dist_bundle_encodeUnreserved(str) {
   return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
     return "%" + c.charCodeAt(0).toString(16).toUpperCase();
   });
 }
-function encodeValue(operator, value, key) {
-  value = operator === "+" || operator === "#" ? encodeReserved(value) : encodeUnreserved(value);
+function dist_bundle_encodeValue(operator, value, key) {
+  value = operator === "+" || operator === "#" ? dist_bundle_encodeReserved(value) : dist_bundle_encodeUnreserved(value);
   if (key) {
-    return encodeUnreserved(key) + "=" + value;
+    return dist_bundle_encodeUnreserved(key) + "=" + value;
   } else {
     return value;
   }
 }
-function isDefined(value) {
+function dist_bundle_isDefined(value) {
   return value !== void 0 && value !== null;
 }
-function isKeyOperator(operator) {
+function dist_bundle_isKeyOperator(operator) {
   return operator === ";" || operator === "&" || operator === "?";
 }
-function getValues(context, operator, key, modifier) {
+function dist_bundle_getValues(context, operator, key, modifier) {
   var value = context[key], result = [];
-  if (isDefined(value) && value !== "") {
+  if (dist_bundle_isDefined(value) && value !== "") {
     if (typeof value === "string" || typeof value === "number" || typeof value === "bigint" || typeof value === "boolean") {
       value = value.toString();
       if (modifier && modifier !== "*") {
         value = value.substring(0, parseInt(modifier, 10));
       }
       result.push(
-        encodeValue(operator, value, isKeyOperator(operator) ? key : "")
+        dist_bundle_encodeValue(operator, value, dist_bundle_isKeyOperator(operator) ? key : "")
       );
     } else {
       if (modifier === "*") {
         if (Array.isArray(value)) {
-          value.filter(isDefined).forEach(function(value2) {
+          value.filter(dist_bundle_isDefined).forEach(function(value2) {
             result.push(
-              encodeValue(operator, value2, isKeyOperator(operator) ? key : "")
+              dist_bundle_encodeValue(operator, value2, dist_bundle_isKeyOperator(operator) ? key : "")
             );
           });
         } else {
           Object.keys(value).forEach(function(k) {
-            if (isDefined(value[k])) {
-              result.push(encodeValue(operator, value[k], k));
+            if (dist_bundle_isDefined(value[k])) {
+              result.push(dist_bundle_encodeValue(operator, value[k], k));
             }
           });
         }
       } else {
         const tmp = [];
         if (Array.isArray(value)) {
-          value.filter(isDefined).forEach(function(value2) {
-            tmp.push(encodeValue(operator, value2));
+          value.filter(dist_bundle_isDefined).forEach(function(value2) {
+            tmp.push(dist_bundle_encodeValue(operator, value2));
           });
         } else {
           Object.keys(value).forEach(function(k) {
-            if (isDefined(value[k])) {
-              tmp.push(encodeUnreserved(k));
-              tmp.push(encodeValue(operator, value[k].toString()));
+            if (dist_bundle_isDefined(value[k])) {
+              tmp.push(dist_bundle_encodeUnreserved(k));
+              tmp.push(dist_bundle_encodeValue(operator, value[k].toString()));
             }
           });
         }
-        if (isKeyOperator(operator)) {
-          result.push(encodeUnreserved(key) + "=" + tmp.join(","));
+        if (dist_bundle_isKeyOperator(operator)) {
+          result.push(dist_bundle_encodeUnreserved(key) + "=" + tmp.join(","));
         } else if (tmp.length !== 0) {
           result.push(tmp.join(","));
         }
@@ -61772,23 +61725,23 @@ function getValues(context, operator, key, modifier) {
     }
   } else {
     if (operator === ";") {
-      if (isDefined(value)) {
-        result.push(encodeUnreserved(key));
+      if (dist_bundle_isDefined(value)) {
+        result.push(dist_bundle_encodeUnreserved(key));
       }
     } else if (value === "" && (operator === "&" || operator === "?")) {
-      result.push(encodeUnreserved(key) + "=");
+      result.push(dist_bundle_encodeUnreserved(key) + "=");
     } else if (value === "") {
       result.push("");
     }
   }
   return result;
 }
-function parseUrl(template) {
+function dist_bundle_parseUrl(template) {
   return {
-    expand: expand.bind(null, template)
+    expand: dist_bundle_expand.bind(null, template)
   };
 }
-function expand(template, context) {
+function dist_bundle_expand(template, context) {
   var operators = ["+", "#", ".", "/", ";", "?", "&"];
   template = template.replace(
     /\{([^\{\}]+)\}|([^\{\}]+)/g,
@@ -61802,7 +61755,7 @@ function expand(template, context) {
         }
         expression.split(/,/g).forEach(function(variable) {
           var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-          values.push(getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
+          values.push(dist_bundle_getValues(context, operator, tmp[1], tmp[2] || tmp[3]));
         });
         if (operator && operator !== "+") {
           var separator = ",";
@@ -61816,7 +61769,7 @@ function expand(template, context) {
           return values.join(",");
         }
       } else {
-        return encodeReserved(literal);
+        return dist_bundle_encodeReserved(literal);
       }
     }
   );
@@ -61828,12 +61781,12 @@ function expand(template, context) {
 }
 
 // pkg/dist-src/parse.js
-function parse(options) {
+function dist_bundle_parse(options) {
   let method = options.method.toUpperCase();
   let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
   let headers = Object.assign({}, options.headers);
   let body;
-  let parameters = omit(options, [
+  let parameters = dist_bundle_omit(options, [
     "method",
     "baseUrl",
     "url",
@@ -61841,13 +61794,13 @@ function parse(options) {
     "request",
     "mediaType"
   ]);
-  const urlVariableNames = extractUrlVariableNames(url);
-  url = parseUrl(url).expand(parameters);
+  const urlVariableNames = dist_bundle_extractUrlVariableNames(url);
+  url = dist_bundle_parseUrl(url).expand(parameters);
   if (!/^http/.test(url)) {
     url = options.baseUrl + url;
   }
   const omittedParameters = Object.keys(options).filter((option) => urlVariableNames.includes(option)).concat("baseUrl");
-  const remainingParameters = omit(parameters, omittedParameters);
+  const remainingParameters = dist_bundle_omit(parameters, omittedParameters);
   const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
   if (!isBinaryRequest) {
     if (options.mediaType.format) {
@@ -61869,7 +61822,7 @@ function parse(options) {
     }
   }
   if (["GET", "HEAD"].includes(method)) {
-    url = addQueryParameters(url, remainingParameters);
+    url = dist_bundle_addQueryParameters(url, remainingParameters);
   } else {
     if ("data" in remainingParameters) {
       body = remainingParameters.data;
@@ -61893,24 +61846,24 @@ function parse(options) {
 }
 
 // pkg/dist-src/endpoint-with-defaults.js
-function endpointWithDefaults(defaults, route, options) {
-  return parse(merge(defaults, route, options));
+function dist_bundle_endpointWithDefaults(defaults, route, options) {
+  return dist_bundle_parse(dist_bundle_merge(defaults, route, options));
 }
 
 // pkg/dist-src/with-defaults.js
-function withDefaults(oldDefaults, newDefaults) {
-  const DEFAULTS2 = merge(oldDefaults, newDefaults);
-  const endpoint2 = endpointWithDefaults.bind(null, DEFAULTS2);
+function endpoint_dist_bundle_withDefaults(oldDefaults, newDefaults) {
+  const DEFAULTS2 = dist_bundle_merge(oldDefaults, newDefaults);
+  const endpoint2 = dist_bundle_endpointWithDefaults.bind(null, DEFAULTS2);
   return Object.assign(endpoint2, {
     DEFAULTS: DEFAULTS2,
-    defaults: withDefaults.bind(null, DEFAULTS2),
-    merge: merge.bind(null, DEFAULTS2),
-    parse
+    defaults: endpoint_dist_bundle_withDefaults.bind(null, DEFAULTS2),
+    merge: dist_bundle_merge.bind(null, DEFAULTS2),
+    parse: dist_bundle_parse
   });
 }
 
 // pkg/dist-src/index.js
-var endpoint = withDefaults(null, DEFAULTS);
+var dist_bundle_endpoint = endpoint_dist_bundle_withDefaults(null, dist_bundle_DEFAULTS);
 
 
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/content-type@3.1.1/node_modules/content-type/dist/index.js
@@ -62206,14 +62159,14 @@ function unescapeQuotedPairs(str, start, end) {
 }
 //# sourceMappingURL=index.js.map
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/json-with-bigint@3.5.12/node_modules/json-with-bigint/json-with-bigint.js
-const intRegex = /^-?\d+$/;
-const noiseValue = /^-?\d+n+$/; // Noise - strings that match the custom format before being converted to it
-const originalStringify = JSON.stringify;
-const originalParse = JSON.parse;
-const customFormat = /^-?\d+n$/;
+const json_with_bigint_intRegex = /^-?\d+$/;
+const json_with_bigint_noiseValue = /^-?\d+n+$/; // Noise - strings that match the custom format before being converted to it
+const json_with_bigint_originalStringify = JSON.stringify;
+const json_with_bigint_originalParse = JSON.parse;
+const json_with_bigint_customFormat = /^-?\d+n$/;
 
-const bigIntsStringify = /([\[:])?"(-?\d+)n"($|\s*[,\}\]])/g;
-const noiseStringify = /([\[:])?("-?\d+n+)n("$|"\s*[,\}\]])/g;
+const json_with_bigint_bigIntsStringify = /([\[:])?"(-?\d+)n"($|\s*[,\}\]])/g;
+const json_with_bigint_noiseStringify = /([\[:])?("-?\d+n+)n("$|"\s*[,\}\]])/g;
 
 /**
  * @typedef {(this: any, key: string | number | undefined, value: any) => any} Replacer
@@ -62282,7 +62235,7 @@ const stringifyIteratively = (rootValue, replacer, spaceParam) => {
       val = val.toJSON(key);
     }
 
-    const isNoise = typeof val === "string" && noiseValue.test(val);
+    const isNoise = typeof val === "string" && json_with_bigint_noiseValue.test(val);
 
     if (isNoise) return val + "n";
 
@@ -62327,7 +62280,7 @@ const stringifyIteratively = (rootValue, replacer, spaceParam) => {
   const isRootNativeRawJSON = isRawJSON(rootProcessed);
 
   if (isRootPrimitive || isRootNativeRawJSON) {
-    return originalStringify(rootProcessed);
+    return json_with_bigint_originalStringify(rootProcessed);
   }
 
   const chunks = [];
@@ -62395,7 +62348,7 @@ const stringifyIteratively = (rootValue, replacer, spaceParam) => {
             node.first = false;
             node.index++;
           } else {
-            chunks.push(originalStringify(childVal));
+            chunks.push(json_with_bigint_originalStringify(childVal));
             node.first = false;
             node.index++;
           }
@@ -62419,9 +62372,9 @@ const stringifyIteratively = (rootValue, replacer, spaceParam) => {
         if (!node.first) chunks.push(",");
 
         if (space) {
-          chunks.push("\n" + space.repeat(level) + originalStringify(k) + ": ");
+          chunks.push("\n" + space.repeat(level) + json_with_bigint_originalStringify(k) + ": ");
         } else {
-          chunks.push(originalStringify(k) + ":");
+          chunks.push(json_with_bigint_originalStringify(k) + ":");
         }
 
         const isComplexObject =
@@ -62449,7 +62402,7 @@ const stringifyIteratively = (rootValue, replacer, spaceParam) => {
 
           break; // Stop current loop level to process the newly pushed stack node
         } else {
-          chunks.push(originalStringify(childVal));
+          chunks.push(json_with_bigint_originalStringify(childVal));
           node.first = false;
         }
       }
@@ -62493,12 +62446,12 @@ const stringifyIteratively = (rootValue, replacer, spaceParam) => {
  * A string or number to specify indentation or pretty-printing.
  * @returns {string} The JSON string representation.
  */
-const JSONStringify = (value, replacer, space) => {
+const json_with_bigint_JSONStringify = (value, replacer, space) => {
   try {
     const supportsRawJSON = "rawJSON" in JSON;
 
     if (supportsRawJSON) {
-      return originalStringify(
+      return json_with_bigint_originalStringify(
         value,
         (key, val) => {
           if (typeof val === "bigint") return JSON.rawJSON(val.toString());
@@ -62518,12 +62471,12 @@ const JSONStringify = (value, replacer, space) => {
       );
     }
 
-    if (!value) return originalStringify(value, replacer, space);
+    if (!value) return json_with_bigint_originalStringify(value, replacer, space);
 
-    const convertedToCustomJSON = originalStringify(
+    const convertedToCustomJSON = json_with_bigint_originalStringify(
       value,
       (key, val) => {
-        const isNoise = typeof val === "string" && noiseValue.test(val);
+        const isNoise = typeof val === "string" && json_with_bigint_noiseValue.test(val);
 
         if (isNoise) return val.toString() + "n"; // Mark noise values with additional "n" to offset the deletion of one "n" during the processing
 
@@ -62544,11 +62497,11 @@ const JSONStringify = (value, replacer, space) => {
     );
 
     const processedJSON = convertedToCustomJSON.replace(
-      bigIntsStringify,
+      json_with_bigint_bigIntsStringify,
       "$1$2$3",
     ); // Delete one "n" off the end of every BigInt value
 
-    const denoisedJSON = processedJSON.replace(noiseStringify, "$1$2$3"); // Remove one "n" off the end of every noisy string
+    const denoisedJSON = processedJSON.replace(json_with_bigint_noiseStringify, "$1$2$3"); // Remove one "n" off the end of every noisy string
 
     return denoisedJSON;
   } catch (error) {
@@ -62561,16 +62514,16 @@ const JSONStringify = (value, replacer, space) => {
 
       if (supportsRawJSON) return convertedJSON;
 
-      const processedJSON = convertedJSON.replace(bigIntsStringify, "$1$2$3");
+      const processedJSON = convertedJSON.replace(json_with_bigint_bigIntsStringify, "$1$2$3");
 
-      return processedJSON.replace(noiseStringify, "$1$2$3");
+      return processedJSON.replace(json_with_bigint_noiseStringify, "$1$2$3");
     }
 
     throw error;
   }
 };
 
-const featureCache = new Map();
+const json_with_bigint_featureCache = new Map();
 
 /**
  * Detects if the current JSON.parse implementation supports the context.source feature.
@@ -62580,11 +62533,11 @@ const featureCache = new Map();
  *
  * @returns {boolean} true if context.source is supported, false otherwise.
  */
-const isContextSourceSupported = () => {
+const json_with_bigint_isContextSourceSupported = () => {
   const parseFingerprint = JSON.parse.toString();
 
-  if (featureCache.has(parseFingerprint)) {
-    return featureCache.get(parseFingerprint);
+  if (json_with_bigint_featureCache.has(parseFingerprint)) {
+    return json_with_bigint_featureCache.get(parseFingerprint);
   }
 
   try {
@@ -62592,11 +62545,11 @@ const isContextSourceSupported = () => {
       "1",
       (_, __, context) => !!context?.source && context.source === "1",
     );
-    featureCache.set(parseFingerprint, result);
+    json_with_bigint_featureCache.set(parseFingerprint, result);
 
     return result;
   } catch {
-    featureCache.set(parseFingerprint, false);
+    json_with_bigint_featureCache.set(parseFingerprint, false);
 
     return false;
   }
@@ -62612,13 +62565,13 @@ const isContextSourceSupported = () => {
  * @param {Reviver} [userReviver] User's custom reviver function.
  * @returns {any} The transformed value.
  */
-const convertMarkedBigIntsReviver = (key, value, context, userReviver) => {
+const json_with_bigint_convertMarkedBigIntsReviver = (key, value, context, userReviver) => {
   const isCustomFormatBigInt =
-    typeof value === "string" && customFormat.test(value);
+    typeof value === "string" && json_with_bigint_customFormat.test(value);
 
   if (isCustomFormatBigInt) return BigInt(value.slice(0, -1));
 
-  const isNoiseValue = typeof value === "string" && noiseValue.test(value);
+  const isNoiseValue = typeof value === "string" && json_with_bigint_noiseValue.test(value);
   if (isNoiseValue) return value.slice(0, -1);
 
   const hasUserReviver = typeof userReviver === "function";
@@ -62639,13 +62592,13 @@ const convertMarkedBigIntsReviver = (key, value, context, userReviver) => {
  * @param {Reviver} [reviver] Transform function to apply to each value.
  * @returns {any} Parsed JavaScript value.
  */
-const JSONParseV2 = (text, reviver) => {
+const json_with_bigint_JSONParseV2 = (text, reviver) => {
   return JSON.parse(text, (key, value, context) => {
     const isNumber = typeof value === "number";
     const isOutOfBounds =
       value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER;
     const isBigNumber = isNumber && isOutOfBounds;
-    const isInt = context && intRegex.test(context.source);
+    const isInt = context && json_with_bigint_intRegex.test(context.source);
     const isBigInt = isBigNumber && isInt;
 
     if (isBigInt) return BigInt(context.source);
@@ -62658,11 +62611,11 @@ const JSONParseV2 = (text, reviver) => {
   });
 };
 
-const MAX_INT = Number.MAX_SAFE_INTEGER.toString();
-const MAX_DIGITS = MAX_INT.length;
-const stringsOrLargeNumbers =
+const json_with_bigint_MAX_INT = Number.MAX_SAFE_INTEGER.toString();
+const json_with_bigint_MAX_DIGITS = json_with_bigint_MAX_INT.length;
+const json_with_bigint_stringsOrLargeNumbers =
   /"(?:[^"\\]|\\.)*"|-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][+-]?[0-9]+)?/g;
-const noiseValueWithQuotes = /^"-?\d+n+"$/; // Noise - strings that match the custom format before being converted to it
+const json_with_bigint_noiseValueWithQuotes = /^"-?\d+n+"$/; // Noise - strings that match the custom format before being converted to it
 
 /**
  * Iteratively traverses the parsed object bottom-up (post-order),
@@ -62698,12 +62651,12 @@ const applyReviverIteratively = (parsed, userReviver) => {
       let value = parent[key];
 
       if (typeof value === "string") {
-        const isCustomFormatBigInt = customFormat.test(value);
+        const isCustomFormatBigInt = json_with_bigint_customFormat.test(value);
 
         if (isCustomFormatBigInt) {
           value = BigInt(value.slice(0, -1));
         } else {
-          const isNoise = noiseValue.test(value);
+          const isNoise = json_with_bigint_noiseValue.test(value);
 
           if (isNoise) value = value.slice(0, -1);
         }
@@ -62738,10 +62691,10 @@ const applyReviverIteratively = (parsed, userReviver) => {
  */
 const serializeBigInts = (text) => {
   return text.replace(
-    stringsOrLargeNumbers,
+    json_with_bigint_stringsOrLargeNumbers,
     (match, digits, fractional, exponential) => {
       const isString = match[0] === '"';
-      const isNoise = isString && noiseValueWithQuotes.test(match);
+      const isNoise = isString && json_with_bigint_noiseValueWithQuotes.test(match);
 
       if (isNoise) return match.substring(0, match.length - 1) + 'n"'; // Mark noise values with additional "n" to offset the deletion of one "n" during the processing
 
@@ -62750,8 +62703,8 @@ const serializeBigInts = (text) => {
       // With a fixed number of digits, we can correctly use lexicographical comparison to do a numeric comparison
       const isLessThanMaxSafeInt =
         digits &&
-        (digits.length < MAX_DIGITS ||
-          (digits.length === MAX_DIGITS && digits <= MAX_INT));
+        (digits.length < json_with_bigint_MAX_DIGITS ||
+          (digits.length === json_with_bigint_MAX_DIGITS && digits <= json_with_bigint_MAX_INT));
 
       const isStandardValue =
         isString || hasFractionalOrExponential || isLessThanMaxSafeInt;
@@ -62780,22 +62733,22 @@ const serializeBigInts = (text) => {
  * @returns {any} The parsed JavaScript value.
  * @throws {SyntaxError} If text is not valid JSON.
  */
-const JSONParse = (text, reviver) => {
-  if (!text) return originalParse(text, reviver);
+const json_with_bigint_JSONParse = (text, reviver) => {
+  if (!text) return json_with_bigint_originalParse(text, reviver);
 
   try {
-    if (isContextSourceSupported()) return JSONParseV2(text, reviver); // Shortcut to a faster (2x) and simpler version
+    if (json_with_bigint_isContextSourceSupported()) return json_with_bigint_JSONParseV2(text, reviver); // Shortcut to a faster (2x) and simpler version
 
     // Find and mark big numbers with "n"
     const serializedData = serializeBigInts(text);
 
-    return originalParse(serializedData, (key, value, context) =>
-      convertMarkedBigIntsReviver(key, value, context, reviver),
+    return json_with_bigint_originalParse(serializedData, (key, value, context) =>
+      json_with_bigint_convertMarkedBigIntsReviver(key, value, context, reviver),
     );
   } catch (error) {
     if (error instanceof RangeError) {
       const serializedData = serializeBigInts(text);
-      const parsed = originalParse(serializedData);
+      const parsed = json_with_bigint_originalParse(serializedData);
 
       return applyReviverIteratively(parsed, reviver);
     }
@@ -62817,9 +62770,9 @@ const JSONParse = (text, reviver) => {
 var request_dist_bundle_VERSION = "10.0.16";
 
 // pkg/dist-src/defaults.js
-var defaults_default = {
+var dist_bundle_defaults_default = {
   headers: {
-    "user-agent": `octokit-request.js/${request_dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+    "user-agent": `octokit-request.js/${request_dist_bundle_VERSION} ${getUserAgent()}`
   }
 };
 
@@ -62828,7 +62781,7 @@ var defaults_default = {
 
 
 // pkg/dist-src/is-plain-object.js
-function dist_bundle_isPlainObject(value) {
+function request_dist_bundle_isPlainObject(value) {
   if (typeof value !== "object" || value === null) return false;
   if (Object.prototype.toString.call(value) !== "[object Object]") return false;
   const proto = Object.getPrototypeOf(value);
@@ -62839,8 +62792,8 @@ function dist_bundle_isPlainObject(value) {
 
 // pkg/dist-src/fetch-wrapper.js
 
-var dist_bundle_noop = () => "";
-async function fetchWrapper(requestOptions) {
+var request_dist_bundle_noop = () => "";
+async function dist_bundle_fetchWrapper(requestOptions) {
   const fetch = requestOptions.request?.fetch || globalThis.fetch;
   if (!fetch) {
     throw new Error(
@@ -62849,7 +62802,7 @@ async function fetchWrapper(requestOptions) {
   }
   const log = requestOptions.request?.log || console;
   const parseSuccessResponseBody = requestOptions.request?.parseSuccessResponseBody !== false;
-  const body = dist_bundle_isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body) ? JSONStringify(requestOptions.body) : requestOptions.body;
+  const body = request_dist_bundle_isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body) ? json_with_bigint_JSONStringify(requestOptions.body) : requestOptions.body;
   const requestHeaders = Object.fromEntries(
     Object.entries(requestOptions.headers).map(([name, value]) => [
       name,
@@ -62884,7 +62837,7 @@ async function fetchWrapper(requestOptions) {
         }
       }
     }
-    const requestError = new RequestError(message, 500, {
+    const requestError = new dist_src_RequestError(message, 500, {
       request: requestOptions
     });
     requestError.cause = error;
@@ -62916,39 +62869,39 @@ async function fetchWrapper(requestOptions) {
     if (status < 400) {
       return octokitResponse;
     }
-    throw new RequestError(fetchResponse.statusText, status, {
+    throw new dist_src_RequestError(fetchResponse.statusText, status, {
       response: octokitResponse,
       request: requestOptions
     });
   }
   if (status === 304) {
-    octokitResponse.data = await getResponseData(fetchResponse);
-    throw new RequestError("Not modified", status, {
+    octokitResponse.data = await dist_bundle_getResponseData(fetchResponse);
+    throw new dist_src_RequestError("Not modified", status, {
       response: octokitResponse,
       request: requestOptions
     });
   }
   if (status >= 400) {
-    octokitResponse.data = await getResponseData(fetchResponse);
-    throw new RequestError(toErrorMessage(octokitResponse.data), status, {
+    octokitResponse.data = await dist_bundle_getResponseData(fetchResponse);
+    throw new dist_src_RequestError(dist_bundle_toErrorMessage(octokitResponse.data), status, {
       response: octokitResponse,
       request: requestOptions
     });
   }
-  octokitResponse.data = parseSuccessResponseBody ? await getResponseData(fetchResponse) : fetchResponse.body;
+  octokitResponse.data = parseSuccessResponseBody ? await dist_bundle_getResponseData(fetchResponse) : fetchResponse.body;
   return octokitResponse;
 }
-async function getResponseData(response) {
+async function dist_bundle_getResponseData(response) {
   const contentType = response.headers.get("content-type");
   if (!contentType) {
-    return response.text().catch(dist_bundle_noop);
+    return response.text().catch(request_dist_bundle_noop);
   }
   const mimetype = dist_parse(contentType);
-  if (isJSONResponse(mimetype)) {
+  if (dist_bundle_isJSONResponse(mimetype)) {
     let text = "";
     try {
       text = await response.text();
-      return JSONParse(text);
+      return json_with_bigint_JSONParse(text);
     } catch (err) {
       return text;
     }
@@ -62956,7 +62909,7 @@ async function getResponseData(response) {
   // (RFC 2046) and must never be decoded as text, even when the response
   // carries a (misleading) `charset=utf-8` parameter — see #751.
   mimetype.parameters.charset?.toLowerCase() === "utf-8" && mimetype.type !== "application/octet-stream") {
-    return response.text().catch(dist_bundle_noop);
+    return response.text().catch(request_dist_bundle_noop);
   } else {
     return response.arrayBuffer().catch(
       /* v8 ignore next -- @preserve */
@@ -62964,10 +62917,10 @@ async function getResponseData(response) {
     );
   }
 }
-function isJSONResponse(mimetype) {
+function dist_bundle_isJSONResponse(mimetype) {
   return mimetype.type === "application/json" || mimetype.type === "application/scim+json";
 }
-function toErrorMessage(data) {
+function dist_bundle_toErrorMessage(data) {
   if (typeof data === "string") {
     return data;
   }
@@ -62983,32 +62936,32 @@ function toErrorMessage(data) {
 }
 
 // pkg/dist-src/with-defaults.js
-function dist_bundle_withDefaults(oldEndpoint, newDefaults) {
+function request_dist_bundle_withDefaults(oldEndpoint, newDefaults) {
   const endpoint2 = oldEndpoint.defaults(newDefaults);
   const newApi = function(route, parameters) {
     const endpointOptions = endpoint2.merge(route, parameters);
     if (!endpointOptions.request || !endpointOptions.request.hook) {
-      return fetchWrapper(endpoint2.parse(endpointOptions));
+      return dist_bundle_fetchWrapper(endpoint2.parse(endpointOptions));
     }
     const request2 = (route2, parameters2) => {
-      return fetchWrapper(
+      return dist_bundle_fetchWrapper(
         endpoint2.parse(endpoint2.merge(route2, parameters2))
       );
     };
     Object.assign(request2, {
       endpoint: endpoint2,
-      defaults: dist_bundle_withDefaults.bind(null, endpoint2)
+      defaults: request_dist_bundle_withDefaults.bind(null, endpoint2)
     });
     return endpointOptions.request.hook(request2, endpointOptions);
   };
   return Object.assign(newApi, {
     endpoint: endpoint2,
-    defaults: dist_bundle_withDefaults.bind(null, endpoint2)
+    defaults: request_dist_bundle_withDefaults.bind(null, endpoint2)
   });
 }
 
 // pkg/dist-src/index.js
-var dist_bundle_request = dist_bundle_withDefaults(endpoint, defaults_default);
+var dist_bundle_request = request_dist_bundle_withDefaults(dist_bundle_endpoint, dist_bundle_defaults_default);
 
 /* v8 ignore next -- @preserve */
 /* v8 ignore else -- @preserve */
@@ -63019,7 +62972,7 @@ var dist_bundle_request = dist_bundle_withDefaults(endpoint, defaults_default);
 
 
 // pkg/dist-src/version.js
-var graphql_dist_bundle_VERSION = "0.0.0-development";
+var _octokit_graphql_dist_bundle_VERSION = "0.0.0-development";
 
 // pkg/dist-src/with-defaults.js
 
@@ -63028,13 +62981,13 @@ var graphql_dist_bundle_VERSION = "0.0.0-development";
 
 
 // pkg/dist-src/error.js
-function _buildMessageForResponseErrors(data) {
+function dist_bundle_buildMessageForResponseErrors(data) {
   return `Request failed due to following response errors:
 ` + data.errors.map((e) => ` - ${e.message}`).join("\n");
 }
-var GraphqlResponseError = class extends Error {
+var dist_bundle_GraphqlResponseError = class extends Error {
   constructor(request2, headers, response) {
-    super(_buildMessageForResponseErrors(response));
+    super(dist_bundle_buildMessageForResponseErrors(response));
     this.request = request2;
     this.headers = headers;
     this.response = response;
@@ -63053,7 +63006,7 @@ var GraphqlResponseError = class extends Error {
 };
 
 // pkg/dist-src/graphql.js
-var NON_VARIABLE_OPTIONS = [
+var dist_bundle_NON_VARIABLE_OPTIONS = [
   "method",
   "baseUrl",
   "url",
@@ -63063,9 +63016,9 @@ var NON_VARIABLE_OPTIONS = [
   "mediaType",
   "operationName"
 ];
-var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
-var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
-function graphql(request2, query, options) {
+var dist_bundle_FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
+var dist_bundle_GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
+function dist_bundle_graphql(request2, query, options) {
   if (options) {
     if (typeof query === "string" && "query" in options) {
       return Promise.reject(
@@ -63073,7 +63026,7 @@ function graphql(request2, query, options) {
       );
     }
     for (const key in options) {
-      if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
+      if (!dist_bundle_FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
       return Promise.reject(
         new Error(
           `[@octokit/graphql] "${key}" cannot be used as variable name`
@@ -63085,7 +63038,7 @@ function graphql(request2, query, options) {
   const requestOptions = Object.keys(
     parsedOptions
   ).reduce((result, key) => {
-    if (NON_VARIABLE_OPTIONS.includes(key)) {
+    if (dist_bundle_NON_VARIABLE_OPTIONS.includes(key)) {
       result[key] = parsedOptions[key];
       return result;
     }
@@ -63096,8 +63049,8 @@ function graphql(request2, query, options) {
     return result;
   }, {});
   const baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
-  if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
-    requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
+  if (dist_bundle_GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
+    requestOptions.url = baseUrl.replace(dist_bundle_GHES_V3_SUFFIX_REGEX, "/api/graphql");
   }
   return request2(requestOptions).then((response) => {
     if (response.data.errors) {
@@ -63105,7 +63058,7 @@ function graphql(request2, query, options) {
       for (const key of Object.keys(response.headers)) {
         headers[key] = response.headers[key];
       }
-      throw new GraphqlResponseError(
+      throw new dist_bundle_GraphqlResponseError(
         requestOptions,
         headers,
         response.data
@@ -63116,27 +63069,27 @@ function graphql(request2, query, options) {
 }
 
 // pkg/dist-src/with-defaults.js
-function graphql_dist_bundle_withDefaults(request2, newDefaults) {
+function _octokit_graphql_dist_bundle_withDefaults(request2, newDefaults) {
   const newRequest = request2.defaults(newDefaults);
   const newApi = (query, options) => {
-    return graphql(newRequest, query, options);
+    return dist_bundle_graphql(newRequest, query, options);
   };
   return Object.assign(newApi, {
-    defaults: graphql_dist_bundle_withDefaults.bind(null, newRequest),
+    defaults: _octokit_graphql_dist_bundle_withDefaults.bind(null, newRequest),
     endpoint: newRequest.endpoint
   });
 }
 
 // pkg/dist-src/index.js
-var graphql2 = graphql_dist_bundle_withDefaults(dist_bundle_request, {
+var dist_bundle_graphql2 = _octokit_graphql_dist_bundle_withDefaults(dist_bundle_request, {
   headers: {
-    "user-agent": `octokit-graphql.js/${graphql_dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+    "user-agent": `octokit-graphql.js/${_octokit_graphql_dist_bundle_VERSION} ${getUserAgent()}`
   },
   method: "POST",
   url: "/graphql"
 });
-function withCustomRequest(customRequest) {
-  return graphql_dist_bundle_withDefaults(customRequest, {
+function dist_bundle_withCustomRequest(customRequest) {
+  return _octokit_graphql_dist_bundle_withDefaults(customRequest, {
     method: "POST",
     url: "/graphql"
   });
@@ -63144,10 +63097,8 @@ function withCustomRequest(customRequest) {
 
 /* v8 ignore if -- @preserve */
 
-// EXTERNAL MODULE: ./node_modules/.pnpm/@octokit+auth-token@6.0.0/node_modules/@octokit/auth-token/dist-bundle/index.js
-var auth_token_dist_bundle = __nccwpck_require__(4118);
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@7.0.8/node_modules/@octokit/core/dist-src/version.js
-const version_VERSION = "7.0.8";
+const core_dist_src_version_VERSION = "7.0.8";
 
 
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+core@7.0.8/node_modules/@octokit/core/dist-src/index.js
@@ -63157,28 +63108,28 @@ const version_VERSION = "7.0.8";
 
 
 
-const dist_src_noop = () => {
+const core_dist_src_noop = () => {
 };
-const consoleWarn = console.warn.bind(console);
-const consoleError = console.error.bind(console);
-function createLogger(logger = {}) {
+const dist_src_consoleWarn = console.warn.bind(console);
+const dist_src_consoleError = console.error.bind(console);
+function dist_src_createLogger(logger = {}) {
   if (typeof logger.debug !== "function") {
-    logger.debug = dist_src_noop;
+    logger.debug = core_dist_src_noop;
   }
   if (typeof logger.info !== "function") {
-    logger.info = dist_src_noop;
+    logger.info = core_dist_src_noop;
   }
   if (typeof logger.warn !== "function") {
-    logger.warn = consoleWarn;
+    logger.warn = dist_src_consoleWarn;
   }
   if (typeof logger.error !== "function") {
-    logger.error = consoleError;
+    logger.error = dist_src_consoleError;
   }
   return logger;
 }
-const userAgentTrail = `octokit-core.js/${version_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`;
+const dist_src_userAgentTrail = `octokit-core.js/${core_dist_src_version_VERSION} ${getUserAgent()}`;
 class dist_src_Octokit {
-  static VERSION = version_VERSION;
+  static VERSION = core_dist_src_version_VERSION;
   static defaults(defaults) {
     const OctokitWithDefaults = class extends this {
       constructor(...args) {
@@ -63218,7 +63169,7 @@ class dist_src_Octokit {
     return NewOctokit;
   }
   constructor(options = {}) {
-    const hook = new before_after_hook/* default */.A.Collection();
+    const hook = new before_after_hook.Collection();
     const requestDefaults = {
       baseUrl: dist_bundle_request.endpoint.DEFAULTS.baseUrl,
       headers: {},
@@ -63231,7 +63182,7 @@ class dist_src_Octokit {
         format: ""
       }
     };
-    requestDefaults.headers["user-agent"] = options.userAgent ? `${options.userAgent} ${userAgentTrail}` : userAgentTrail;
+    requestDefaults.headers["user-agent"] = options.userAgent ? `${options.userAgent} ${dist_src_userAgentTrail}` : dist_src_userAgentTrail;
     if (options.baseUrl) {
       requestDefaults.baseUrl = options.baseUrl;
     }
@@ -63242,8 +63193,8 @@ class dist_src_Octokit {
       requestDefaults.headers["time-zone"] = options.timeZone;
     }
     this.request = dist_bundle_request.defaults(requestDefaults);
-    this.graphql = withCustomRequest(this.request).defaults(requestDefaults);
-    this.log = createLogger(options.log);
+    this.graphql = dist_bundle_withCustomRequest(this.request).defaults(requestDefaults);
+    this.log = dist_src_createLogger(options.log);
     this.hook = hook;
     if (!options.authStrategy) {
       if (!options.auth) {
@@ -63251,7 +63202,7 @@ class dist_src_Octokit {
           type: "unauthenticated"
         });
       } else {
-        const auth = (0,auth_token_dist_bundle/* createTokenAuth */.g)(options.auth);
+        const auth = createTokenAuth(options.auth);
         hook.wrap("request", auth.hook);
         this.auth = auth;
       }
@@ -63363,7 +63314,7 @@ async function oauthRequest(request, route, parameters) {
   };
   const response = await request(route, withOAuthParameters);
   if ("error" in response.data) {
-    const error = new RequestError(
+    const error = new dist_src_RequestError(
       `${response.data.error_description} (${response.data.error}, ${response.data.error_uri})`,
       400,
       {
@@ -63725,14 +63676,14 @@ async function waitForAccessToken(request, clientId, clientType, verification) {
 }
 
 // pkg/dist-src/auth.js
-async function auth(state, authOptions) {
+async function dist_bundle_auth(state, authOptions) {
   return getOAuthAccessToken(state, {
     auth: authOptions
   });
 }
 
 // pkg/dist-src/hook.js
-async function hook(state, request, route, parameters) {
+async function dist_bundle_hook(state, request, route, parameters) {
   let endpoint = request.endpoint.merge(
     route,
     parameters
@@ -63755,7 +63706,7 @@ var auth_oauth_device_dist_bundle_VERSION = "0.0.0-development";
 function createOAuthDeviceAuth(options) {
   const requestWithDefaults = options.request || dist_bundle_request.defaults({
     headers: {
-      "user-agent": `octokit-auth-oauth-device.js/${auth_oauth_device_dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+      "user-agent": `octokit-auth-oauth-device.js/${auth_oauth_device_dist_bundle_VERSION} ${getUserAgent()}`
     }
   });
   const { request = requestWithDefaults, ...otherOptions } = options;
@@ -63779,8 +63730,8 @@ function createOAuthDeviceAuth(options) {
       '[@octokit/auth-oauth-device] "onVerification" option must be a function (https://github.com/octokit/auth-oauth-device.js#usage)'
     );
   }
-  return Object.assign(auth.bind(null, state), {
-    hook: hook.bind(null, state)
+  return Object.assign(dist_bundle_auth.bind(null, state), {
+    hook: dist_bundle_hook.bind(null, state)
   });
 }
 
@@ -63845,7 +63796,7 @@ async function getAuthentication(state) {
 
 // pkg/dist-src/auth.js
 
-async function dist_bundle_auth(state, options = {}) {
+async function auth_oauth_user_dist_bundle_auth(state, options = {}) {
   if (!state.authentication) {
     state.authentication = state.clientType === "oauth-app" ? await getAuthentication(state) : await getAuthentication(state);
   }
@@ -63940,7 +63891,7 @@ function requiresBasicAuth(url) {
 }
 
 // pkg/dist-src/hook.js
-async function dist_bundle_hook(state, request, route, parameters = {}) {
+async function auth_oauth_user_dist_bundle_hook(state, request, route, parameters = {}) {
   const endpoint = request.endpoint.merge(
     route,
     parameters
@@ -63953,7 +63904,7 @@ async function dist_bundle_hook(state, request, route, parameters = {}) {
     endpoint.headers.authorization = `basic ${credentials}`;
     return request(endpoint);
   }
-  const { token } = state.clientType === "oauth-app" ? await dist_bundle_auth({ ...state, request }) : await dist_bundle_auth({ ...state, request });
+  const { token } = state.clientType === "oauth-app" ? await auth_oauth_user_dist_bundle_auth({ ...state, request }) : await auth_oauth_user_dist_bundle_auth({ ...state, request });
   endpoint.headers.authorization = "token " + token;
   return request(endpoint);
 }
@@ -63965,7 +63916,7 @@ function createOAuthUserAuth({
   clientType = "oauth-app",
   request = dist_bundle_request.defaults({
     headers: {
-      "user-agent": `octokit-auth-oauth-app.js/${auth_oauth_user_dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+      "user-agent": `octokit-auth-oauth-app.js/${auth_oauth_user_dist_bundle_VERSION} ${getUserAgent()}`
     }
   }),
   onTokenCreated,
@@ -63979,9 +63930,9 @@ function createOAuthUserAuth({
     strategyOptions,
     request
   });
-  return Object.assign(dist_bundle_auth.bind(null, state), {
+  return Object.assign(auth_oauth_user_dist_bundle_auth.bind(null, state), {
     // @ts-expect-error not worth the extra code needed to appease TS
-    hook: dist_bundle_hook.bind(null, state)
+    hook: auth_oauth_user_dist_bundle_hook.bind(null, state)
   });
 }
 createOAuthUserAuth.VERSION = auth_oauth_user_dist_bundle_VERSION;
@@ -64069,7 +64020,7 @@ function createOAuthAppAuth(options) {
     {
       request: dist_bundle_request.defaults({
         headers: {
-          "user-agent": `octokit-auth-oauth-app.js/${auth_oauth_app_dist_bundle_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+          "user-agent": `octokit-auth-oauth-app.js/${auth_oauth_app_dist_bundle_VERSION} ${getUserAgent()}`
         }
       }),
       clientType: "oauth-app"
@@ -65606,7 +65557,7 @@ function createAppAuth(options) {
   }
   const request = options.request || dist_bundle_request.defaults({
     headers: {
-      "user-agent": `octokit-auth-app.js/${dist_node_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+      "user-agent": `octokit-auth-app.js/${dist_node_VERSION} ${getUserAgent()}`
     }
   });
   const state = Object.assign(
@@ -65736,7 +65687,7 @@ function addEventHandler(state, eventName, eventHandler) {
 
 
 var OAuthAppOctokit = dist_src_Octokit.defaults({
-  userAgent: `octokit-oauth-app.js/${oauth_app_dist_node_VERSION} ${(0,universal_user_agent/* getUserAgent */.$)()}`
+  userAgent: `octokit-oauth-app.js/${oauth_app_dist_node_VERSION} ${getUserAgent()}`
 });
 
 // pkg/dist-src/methods/get-user-octokit.js
@@ -67428,10 +67379,10 @@ var Webhooks = class {
 
 ;// CONCATENATED MODULE: ./node_modules/.pnpm/@octokit+plugin-paginate-rest@15.0.0_@octokit+core@7.0.8/node_modules/@octokit/plugin-paginate-rest/dist-bundle/index.js
 // pkg/dist-src/version.js
-var plugin_paginate_rest_dist_bundle_VERSION = "0.0.0-development";
+var _octokit_plugin_paginate_rest_dist_bundle_VERSION = "0.0.0-development";
 
 // pkg/dist-src/normalize-paginated-list-response.js
-function normalizePaginatedListResponse(response) {
+function dist_bundle_normalizePaginatedListResponse(response) {
   if (!response.data) {
     return {
       ...response,
@@ -67463,7 +67414,7 @@ function normalizePaginatedListResponse(response) {
 }
 
 // pkg/dist-src/iterator.js
-function iterator(octokit, route, parameters) {
+function dist_bundle_iterator(octokit, route, parameters) {
   const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
   const requestMethod = typeof route === "function" ? route : octokit.request;
   const method = options.method;
@@ -67475,7 +67426,7 @@ function iterator(octokit, route, parameters) {
         if (!url) return { done: true };
         try {
           const response = await requestMethod({ method, url, headers });
-          const normalizedResponse = normalizePaginatedListResponse(response);
+          const normalizedResponse = dist_bundle_normalizePaginatedListResponse(response);
           url = ((normalizedResponse.headers.link || "").match(
             /<([^<>]+)>;\s*rel="next"/
           ) || [])[1];
@@ -67507,19 +67458,19 @@ function iterator(octokit, route, parameters) {
 }
 
 // pkg/dist-src/paginate.js
-function paginate(octokit, route, parameters, mapFn) {
+function dist_bundle_paginate(octokit, route, parameters, mapFn) {
   if (typeof parameters === "function") {
     mapFn = parameters;
     parameters = void 0;
   }
-  return gather(
+  return dist_bundle_gather(
     octokit,
     [],
-    iterator(octokit, route, parameters)[Symbol.asyncIterator](),
+    dist_bundle_iterator(octokit, route, parameters)[Symbol.asyncIterator](),
     mapFn
   );
 }
-function gather(octokit, results, iterator2, mapFn) {
+function dist_bundle_gather(octokit, results, iterator2, mapFn) {
   return iterator2.next().then((result) => {
     if (result.done) {
       return results;
@@ -67534,17 +67485,17 @@ function gather(octokit, results, iterator2, mapFn) {
     if (earlyExit) {
       return results;
     }
-    return gather(octokit, results, iterator2, mapFn);
+    return dist_bundle_gather(octokit, results, iterator2, mapFn);
   });
 }
 
 // pkg/dist-src/compose-paginate.js
-var composePaginateRest = Object.assign(paginate, {
-  iterator
+var dist_bundle_composePaginateRest = Object.assign(dist_bundle_paginate, {
+  iterator: dist_bundle_iterator
 });
 
 // pkg/dist-src/generated/paginating-endpoints.js
-var paginatingEndpoints = (/* unused pure expression or super */ null && ([
+var dist_bundle_paginatingEndpoints = (/* unused pure expression or super */ null && ([
   "GET /advisories",
   "GET /app/hook/deliveries",
   "GET /app/installation-requests",
@@ -67813,23 +67764,23 @@ var paginatingEndpoints = (/* unused pure expression or super */ null && ([
 ]));
 
 // pkg/dist-src/paginating-endpoints.js
-function isPaginatingEndpoint(arg) {
+function dist_bundle_isPaginatingEndpoint(arg) {
   if (typeof arg === "string") {
-    return paginatingEndpoints.includes(arg);
+    return dist_bundle_paginatingEndpoints.includes(arg);
   } else {
     return false;
   }
 }
 
 // pkg/dist-src/index.js
-function paginateRest(octokit) {
+function dist_bundle_paginateRest(octokit) {
   return {
-    paginate: Object.assign(paginate.bind(null, octokit), {
-      iterator: iterator.bind(null, octokit)
+    paginate: Object.assign(dist_bundle_paginate.bind(null, octokit), {
+      iterator: dist_bundle_iterator.bind(null, octokit)
     })
   };
 }
-paginateRest.VERSION = plugin_paginate_rest_dist_bundle_VERSION;
+dist_bundle_paginateRest.VERSION = _octokit_plugin_paginate_rest_dist_bundle_VERSION;
 
 /* v8 ignore next -- @preserve */
 
@@ -67927,7 +67878,7 @@ async function eachInstallation(app, callback) {
 function eachInstallationIterator(app) {
   return {
     async *[Symbol.asyncIterator]() {
-      const iterator = composePaginateRest.iterator(
+      const iterator = dist_bundle_composePaginateRest.iterator(
         app.octokit,
         "GET /app/installations"
       );
@@ -67980,7 +67931,7 @@ function eachRepositoryIterator(app, query) {
     async *[Symbol.asyncIterator]() {
       const iterator = query ? singleInstallationIterator(app, query.installationId) : app.eachInstallation.iterator();
       for await (const { octokit } of iterator) {
-        const repositoriesIterator = composePaginateRest.iterator(
+        const repositoriesIterator = dist_bundle_composePaginateRest.iterator(
           octokit,
           "GET /installation/repositories"
         );
@@ -68183,9 +68134,9 @@ var octokit_dist_bundle_VERSION = "0.0.0-development";
 
 // pkg/dist-src/octokit.js
 
-var Octokit = dist_src/* Octokit */.E.plugin(
-  plugin_rest_endpoint_methods_dist_src/* restEndpointMethods */._,
-  dist_bundle/* paginateRest */.ud,
+var dist_bundle_Octokit = Octokit.plugin(
+  restEndpointMethods,
+  paginateRest,
   paginateGraphQL,
   retry,
   throttling
@@ -68219,8 +68170,8 @@ function onSecondaryRateLimit(retryAfter, options, octokit) {
 
 
 
-var dist_bundle_App = App.defaults({ Octokit });
-var dist_bundle_OAuthApp = OAuthApp.defaults({ Octokit });
+var dist_bundle_App = App.defaults({ Octokit: dist_bundle_Octokit });
+var dist_bundle_OAuthApp = OAuthApp.defaults({ Octokit: dist_bundle_Octokit });
 
 /* v8 ignore next no need to test internals of the throttle plugin -- @preserve */
 
@@ -68232,9 +68183,31 @@ var dist_bundle_OAuthApp = OAuthApp.defaults({ Octokit });
 // thanks to Siddhartha Varma for documenting the workflow steps
 // https://siddharthav.medium.com/push-multiple-files-under-a-single-commit-through-github-api-f1a5b0b283ae
 
+// Retry tuning for the ref update, consumed by the retry loop.
+const MAX_ATTEMPTS = 5
+const BASE_DELAY_MS = 250
+
+// A 422 on the ref update is overloaded: only these two messages mean "someone else moved the branch".
+// Everything else (protected branch, required checks, missing signature, branch gone) must fail on the first attempt.
+const RETRYABLE_REF_MESSAGES = ['Update is not a fast forward', 'Reference cannot be updated']
+
+// Never compare error.message: octokit v5 appends " - <documentation_url>", so an exact match can never succeed.
+const isRetryableRefUpdate = (error) =>
+  error.status === 422 && RETRYABLE_REF_MESSAGES.includes(error.response?.data?.message)
+
+class RefConflictError extends Error {
+  constructor(cause) {
+    super(cause.message)
+    this.name = 'RefConflictError'
+    this.cause = cause
+  }
+}
+
 const defaultHeaders = {
   'X-GitHub-Api-Version': '2022-11-28',
 }
+
+const defaultSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const debug = process.env.NODE_LOG_LEVEL === 'debug'
 
@@ -68251,7 +68224,8 @@ const debug = process.env.NODE_LOG_LEVEL === 'debug'
 
 // TOKEN AUTH tested with APP TOKEN and PAT
 const commit = async (config, files, message, tag) => {
-  const octokit = new Octokit({ auth: config.token || process.env.GITHUB_TOKEN })
+  const client = config.client || new dist_bundle_Octokit({ auth: config.token || process.env.GITHUB_TOKEN })
+  const sleep = config.sleep || defaultSleep
   const owner = config.owner
   const repo = config.repo
   const branch = config.branch
@@ -68259,8 +68233,9 @@ const commit = async (config, files, message, tag) => {
 
   // Create Blobs
   // https://docs.github.com/en/rest/git/blobs?apiVersion=2022-11-28#create-a-blob
+  // Blobs are uploaded exactly once, before the retry loop: a retry only needs the new head, not new blobs.
   for (const file of files) {
-    const { data } = await octokit.request('POST /repos/{owner}/{repo}/git/blobs', {
+    const { data } = await client.request('POST /repos/{owner}/{repo}/git/blobs', {
       owner,
       repo,
       content: file.content,
@@ -68277,18 +68252,6 @@ const commit = async (config, files, message, tag) => {
     echo`${JSON.stringify(files, null, 2)}`
   }
 
-  // Get Tree
-  // https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#get-a-tree
-  const response = await octokit.request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}', {
-    owner,
-    repo,
-    tree_sha: config.branch,
-    headers,
-  })
-  if (debug) {
-    echo`${JSON.stringify(response, null, 2)}`
-  }
-
   const tree = []
 
   for (const file of files) {
@@ -68303,65 +68266,115 @@ const commit = async (config, files, message, tag) => {
     echo`${JSON.stringify(tree, null, 2)}`
   }
 
-  // Create Tree
-  // https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree
-  const treeResponse = await octokit.request('POST /repos/{owner}/{repo}/git/trees', {
-    owner,
-    repo,
-    base_tree: response.data.sha,
-    tree,
-    headers,
-  })
-  if (debug) {
-    echo`${JSON.stringify(treeResponse, null, 2)}`
-  }
-
-  // Get Sha from main branch
-  const shaResponse = await octokit.request('GET /repos/{owner}/{repo}/git/refs/heads/{branch}', {
-    owner,
-    repo,
-    branch,
-    headers,
-  })
-  if (debug) {
-    echo`${JSON.stringify(shaResponse.data, null, 2)}`
-  }
-
-  // Add Commit
-  // https://docs.github.com/en/rest/git/commits?apiVersion=2022-11-28#create-a-commit
-  const commitResponse = await octokit.request('POST /repos/{owner}/{repo}/git/commits', {
-    tree: treeResponse.data.sha,
-    message,
-    parents: [shaResponse.data.object.sha],
-    owner,
-    repo,
-    headers,
-  })
-  if (debug) {
-    echo`${JSON.stringify(commitResponse.data, null, 2)}`
-  }
-
-  // Update Reference
+  // Only the PATCH is wrapped: it is the one call that can lose a race, so it is the only source of a ref conflict.
   // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#update-a-reference
-  const updateResponse = await octokit.request('PATCH /repos/{owner}/{repo}/git/refs/heads/{branch}', {
-    branch,
-    sha: commitResponse.data.sha,
-    owner,
-    repo,
-    headers,
-  })
+  const updateRef = async (sha) => {
+    try {
+      return await client.request('PATCH /repos/{owner}/{repo}/git/refs/heads/{branch}', {
+        branch,
+        sha,
+        owner,
+        repo,
+        headers,
+      })
+    } catch (error) {
+      if (isRetryableRefUpdate(error)) {
+        throw new RefConflictError(error)
+      }
+      throw error
+    }
+  }
+
+  let updateResponse
+  let commitSha
+
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    if (debug) {
+      echo`ref update attempt ${attempt} of ${MAX_ATTEMPTS}`
+    }
+    try {
+      // Re-read the ref on every attempt: a concurrent commit moved the branch, so the base tree and the parent
+      // must come from the new head. Blobs are already uploaded and are reused as they are.
+      // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#get-a-reference
+      const refResponse = await client.request('GET /repos/{owner}/{repo}/git/refs/heads/{branch}', {
+        owner,
+        repo,
+        branch,
+        headers,
+      })
+      if (debug) {
+        echo`${JSON.stringify(refResponse.data, null, 2)}`
+      }
+      const headSha = refResponse.data.object.sha
+
+      // Get the tree of that commit
+      // https://docs.github.com/en/rest/git/commits?apiVersion=2022-11-28#get-a-commit
+      const headCommitResponse = await client.request('GET /repos/{owner}/{repo}/git/commits/{commit_sha}', {
+        owner,
+        repo,
+        commit_sha: headSha,
+        headers,
+      })
+      if (debug) {
+        echo`${JSON.stringify(headCommitResponse.data, null, 2)}`
+      }
+
+      // Create Tree
+      // https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28#create-a-tree
+      const treeResponse = await client.request('POST /repos/{owner}/{repo}/git/trees', {
+        owner,
+        repo,
+        base_tree: headCommitResponse.data.tree.sha,
+        tree,
+        headers,
+      })
+      if (debug) {
+        echo`${JSON.stringify(treeResponse, null, 2)}`
+      }
+
+      // Add Commit
+      // https://docs.github.com/en/rest/git/commits?apiVersion=2022-11-28#create-a-commit
+      const commitResponse = await client.request('POST /repos/{owner}/{repo}/git/commits', {
+        tree: treeResponse.data.sha,
+        message,
+        parents: [headSha],
+        owner,
+        repo,
+        headers,
+      })
+      if (debug) {
+        echo`${JSON.stringify(commitResponse.data, null, 2)}`
+      }
+
+      updateResponse = await updateRef(commitResponse.data.sha)
+      commitSha = commitResponse.data.sha
+      break
+    } catch (error) {
+      if (!(error instanceof RefConflictError)) {
+        throw error
+      }
+      if (attempt === MAX_ATTEMPTS) {
+        throw new Error(
+          `Failed to update branch ${branch} after ${MAX_ATTEMPTS} attempts: ${error.cause.response.data.message}`
+        )
+      }
+      await sleep(BASE_DELAY_MS * attempt + Math.floor(Math.random() * BASE_DELAY_MS))
+    }
+  }
+
   if (debug) {
     echo`${JSON.stringify(updateResponse.data, null, 2)}`
   }
 
+  // The tag is created once and outside the retry loop: a 422 here must not re-create the commit.
   if (tag) {
     // Update Reference
     // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#update-a-reference
-    const updateTagResponse = await octokit.request('POST /repos/{owner}/{repo}/git/refs', {
-      sha: commitResponse.data.sha,
+    const updateTagResponse = await client.request('POST /repos/{owner}/{repo}/git/refs', {
+      sha: commitSha,
       owner,
-      ref: `refs/tags/${tag}`,
       repo,
+      ref: `refs/tags/${tag}`,
       headers,
     })
     if (debug) {
@@ -68371,20 +68384,6 @@ const commit = async (config, files, message, tag) => {
   return updateResponse.data
 }
 
-
-/***/ }),
-
-/***/ 2674:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
-
-
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  o: () => (/* binding */ getFiles)
-});
-
-// EXTERNAL MODULE: ./node_modules/.pnpm/zx@8.8.5/node_modules/zx/build/globals.js + 3 modules
-var globals = __nccwpck_require__(8267);
 ;// CONCATENATED MODULE: external "node:fs/promises"
 const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("node:fs/promises");
 ;// CONCATENATED MODULE: ./src/get-files.mjs
@@ -68392,7 +68391,7 @@ const promises_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.ur
 
 
 
-const debug = process.env.NODE_LOG_LEVEL === 'debug'
+const get_files_debug = process.env.NODE_LOG_LEVEL === 'debug'
 
 // const filesInput = argv.files?.trim().split(',') || null
 
@@ -68406,7 +68405,7 @@ const mapEncoding = (encoding) => {
 
 // Retrieve all file objects changed and staged.
 const getFiles = async (filesInput) => {
-  if (debug) {
+  if (get_files_debug) {
     echo`${JSON.stringify({ filesInput }, null, 2)}`
   }
 
@@ -68428,7 +68427,7 @@ const getFiles = async (filesInput) => {
   if (filesInput) {
     files = files.filter((file) => filesInput.indexOf(file) >= 0)
   }
-  if (debug) {
+  if (get_files_debug) {
     echo`${JSON.stringify(files, null, 2)}`
   }
 
@@ -68457,28 +68456,17 @@ const getFiles = async (filesInput) => {
       mode: `100${mode}`.trim(), // not sure is prefix is always 100
     }
     data.push(item)
-    if (debug) {
+    if (get_files_debug) {
       echo`${JSON.stringify({ item, path }, null, 2)}`
     }
   }
-  if (debug) {
+  if (get_files_debug) {
     echo`${JSON.stringify({ data }, null, 2)}`
   }
   return data
 }
 
-
-/***/ }),
-
-/***/ 96:
-/***/ ((__webpack_module__, __unused_webpack___webpack_exports__, __nccwpck_require__) => {
-
-__nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(1609);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5560);
-/* harmony import */ var _commit_mjs__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(4819);
-/* harmony import */ var _get_files_mjs__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(2674);
-/* harmony import */ var zx_globals__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(8267);
+;// CONCATENATED MODULE: ./src/run.mjs
 
 
 
@@ -68487,53 +68475,35 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 
 /* global $, echo */
 $.verbose = false
-const retryLimit = 10
 
-const getResult = async (context, token, branch, repo, files, message, tag, count) => {
-  if (!count) count = 0
-  try {
-    const result = await (0,_commit_mjs__WEBPACK_IMPORTED_MODULE_2__/* .commit */ .c)(
-      {
-        token,
-        branch,
-        owner: repo[0],
-        repo: repo[1],
-      },
-      files,
-      message,
-      tag,
-    )
-    echo`${JSON.stringify({ result, context, branch, repo, message, tag }, undefined, 2)}`
-    return result
-  } catch (error) {
-    if (error.message === 'Update is not a fast forward' && count <= retryLimit) {
-      count++
-      return await getResult(context, token, branch, repo, files, message, tag, count)
-    } else if (error.message === 'Update is not a fast forward') {
-      throw new Error('Update is not a fast forward, retry limit reached.')
-    } else {
-      throw error
-    }
+// Dependencies are injectable so the entry point can be tested without network, git or @actions/core.
+const run = async (deps = {}) => {
+  const coreModule = deps.core || core
+  const context = deps.context || github_context
+  const getFilesFn = deps.getFiles || getFiles
+  const commitFn = deps.commit || commit
+
+  const filesInput = coreModule.getInput('files')
+  const repo = (coreModule.getInput('repository') || `${context.repo.owner}/${context.repo.repo}`).split('/')
+  const token = coreModule.getInput('token')
+  const message = coreModule.getInput('message')
+  const branch = coreModule.getInput('ref') || context.ref.replace(/^refs\/heads\//, '')
+  const tag = coreModule.getInput('tag') || false
+
+  const files = await getFilesFn(filesInput)
+  if (files.length === 0) {
+    // A true no-op: no API call, no sha output, and reaching the notice is success.
+    coreModule.notice('no files to commit, skipping')
+    return undefined
   }
+
+  // Retrying a lost ref race lives in commit(); there is no second retry loop here.
+  const result = await commitFn({ token, branch, owner: repo[0], repo: repo[1] }, files, message, tag)
+  echo`${JSON.stringify({ result, branch, repo, message, tag }, undefined, 2)}`
+  coreModule.setOutput('sha', result.object?.sha)
+  return result
 }
 
-try {
-  const filesInput = _actions_core__WEBPACK_IMPORTED_MODULE_0__/* .getInput */ .V4('files')
-  const context = _actions_github__WEBPACK_IMPORTED_MODULE_1__/* .context */ ._
-  const repo = (_actions_core__WEBPACK_IMPORTED_MODULE_0__/* .getInput */ .V4('repository') || context.github.repository).split('/')
-  const token = _actions_core__WEBPACK_IMPORTED_MODULE_0__/* .getInput */ .V4('token')
-  const message = _actions_core__WEBPACK_IMPORTED_MODULE_0__/* .getInput */ .V4('message')
-  const branch = _actions_core__WEBPACK_IMPORTED_MODULE_0__/* .getInput */ .V4('ref') || context.github.ref_name
-  const tag = _actions_core__WEBPACK_IMPORTED_MODULE_0__/* .getInput */ .V4('tag') || false
-  const files = await (0,_get_files_mjs__WEBPACK_IMPORTED_MODULE_3__/* .getFiles */ .o)(filesInput)
-  const result = await getResult(context, token, branch, repo, files, message, tag)
-  _actions_core__WEBPACK_IMPORTED_MODULE_0__/* .setOutput */ .uH('sha', result.object?.sha)
-} catch (error) {
-  _actions_core__WEBPACK_IMPORTED_MODULE_0__/* .setFailed */ .C1(error.message)
-}
-
-__webpack_async_result__();
-} catch(e) { __webpack_async_result__(e); } }, 1);
 
 /***/ })
 

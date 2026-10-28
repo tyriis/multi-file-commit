@@ -48,13 +48,17 @@ Thanks for your work [Siddhartha Varma](https://github.com/BRO3886).
 ## Limitations
 
 :warning: it cannot be used on empty repositories. \
-:warning: parallel commits on the same file lead to a race condition where previous changes are overwritten.
+:warning: concurrent commits to the same branch are retried up to 5 attempts, each attempt rebuilt on top of the latest head. If the branch moves on every attempt the run fails with an error instead of overwriting the other run's change. \
+:warning: only a ref update rejected because the branch moved is retried; a protected branch rejection, a missing branch, or any other 422 fails immediately. \
+:warning: a branch force-pushed backwards during a retry cannot be detected: the new head is an ancestor of the commit being pushed, so the API accepts the update (there is no conditional write) and the run re-adds the removed commits.
 
 ## What's new
 
 - First implementation is currently tested
 - Runtime upgraded to Node 24 (GitHub Action runtime and package engine)
 - `zx` upgraded to latest major (8.x)
+- Concurrent commits to the same branch are retried up to 5 attempts instead of overwriting each other ([#9](https://github.com/tyriis/multi-file-commit/issues/9))
+- The action skips with a notice when no staged file is selected ([#9](https://github.com/tyriis/multi-file-commit/issues/9))
 
 ## Usage
 
@@ -82,6 +86,7 @@ Thanks for your work [Siddhartha Varma](https://github.com/BRO3886).
     # A list of files to commit, prevent other staged files to be commited.
     # Example: src/main.mjs,src/main.spec.js
     # If not set all staged files are considered for commit.
+    # If no staged file matches, the action skips, makes no commit, and leaves the `sha` output empty.
     files: ''
 
     # In case you want to tag your commit, just pass a tag reference and this action will do the work for you.

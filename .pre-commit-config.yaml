@@ -8,7 +8,7 @@ exclude: (dist/.*)
 
 repos:
   - repo: https://github.com/thlorenz/doctoc
-    rev: v2.2.0
+    rev: v2.5.0
     hooks:
       - id: doctoc
         args:
@@ -19,7 +19,7 @@ repos:
           - --notitle
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: check-merge-conflict
       - id: check-added-large-files
@@ -46,7 +46,7 @@ repos:
           - --markdown-linebreak-ext=md
 
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.33.0
+    rev: v1.38.0
     hooks:
       - id: yamllint
         args:
@@ -54,20 +54,20 @@ repos:
           - .yamllint.yaml
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
-    rev: v1.4.2
+    rev: v1.5.6
     hooks:
       - id: remove-crlf
       - id: remove-tabs
 
   - repo: https://github.com/sirosen/texthooks
-    rev: 0.6.2
+    rev: 1.0.0
     hooks:
       - id: fix-smartquotes
       - id: fix-ligatures
       - id: forbid-bidi-controls
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.37.0
+    rev: v0.50.0
     hooks:
       - id: markdownlint-fix
         args:
@@ -90,6 +90,6 @@ repos:
       - id: forbid-secrets
 
   - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.18.1
+    rev: v8.30.1
     hooks:
       - id: gitleaks

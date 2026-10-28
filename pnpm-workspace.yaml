@@ -1,2 +1,9 @@
 ---
 minimumReleaseAge: 1440
+
+# unrs-resolver (a dependency of eslint-plugin-import-x) has a napi
+# postinstall step. Its platform binaries already ship as optional
+# dependencies and module resolution works without the script, so deny the
+# build rather than approving it.
+allowBuilds:
+  unrs-resolver: false

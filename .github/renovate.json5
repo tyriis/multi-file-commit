@@ -2,4 +2,12 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   enabled: true,
   extends: ["github>techtales-io/renovate-config:base.json5", "github>techtales-io/renovate-config:node.json5"],
+  // dist/ is committed and the action ships it, so the test suite fails when
+  // the bundle is stale against pnpm-lock.yaml. Rebuild it on every branch so
+  // dependency updates reach the published action without a manual step.
+  postUpgradeTasks: {
+    commands: ["pnpm install --frozen-lockfile", "pnpm build"],
+    fileFilters: ["dist/**"],
+    executionMode: "branch",
+  },
 }

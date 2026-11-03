@@ -58,3 +58,9 @@ jobs:
         with:
           configurationFile: "${{ env.RENOVATE_CONFIG_FILE }}"
           token: "${{ steps.generate-token.outputs.token }}"
+          # The default image ships no package manager, but the postUpgradeTasks
+          # in .github/renovate.json5 run `pnpm` to rebuild the committed
+          # bundle. "44-full" carries the same Renovate major plus the
+          # containerbase tooling; the repository's packageManager field then
+          # selects the exact pnpm version.
+          renovate-version: "44-full"

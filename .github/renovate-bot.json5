@@ -5,4 +5,9 @@
   platformCommit: "enabled",
   platform: "github",
   repositories: ["tyriis/multi-file-commit"],
+  // The postUpgradeTasks in .github/renovate.json5 rebuild the committed
+  // dist/ bundle. Commands run without a shell and are refused unless they
+  // match this list, which is a global-only option and therefore cannot live
+  // in the repository config.
+  allowedCommands: ["^pnpm install --frozen-lockfile$", "^pnpm build$"],
 }

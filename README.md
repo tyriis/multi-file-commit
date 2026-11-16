@@ -50,7 +50,10 @@ Thanks for your work [Siddhartha Varma](https://github.com/BRO3886).
 :warning: it cannot be used on empty repositories. \
 :warning: concurrent commits to the same branch are retried up to 5 attempts, each attempt rebuilt on top of the latest head. If the branch moves on every attempt the run fails with an error instead of overwriting the other run's change. \
 :warning: only a ref update rejected because the branch moved is retried; a protected branch rejection, a missing branch, or any other 422 fails immediately. \
-:warning: a branch force-pushed backwards during a retry cannot be detected: the new head is an ancestor of the commit being pushed, so the API accepts the update (there is no conditional write) and the run re-adds the removed commits.
+:warning: a branch force-pushed backwards during a retry cannot be detected: the new head is an ancestor of the commit being pushed, so the API accepts the update (there is no conditional write) and the run re-adds the removed commits. \
+:warning: parallel runs that commit the same file overwrite each other: each run uploads the whole file from its own checkout, so a run started before another finished restores \
+that run's older content and still reports success. Run such jobs sequentially, or re-read the file and re-apply the change when the branch moved; runs committing different files are safe \
+([#9](https://github.com/tyriis/multi-file-commit/issues/9)).
 
 ## What's new
 

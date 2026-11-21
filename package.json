@@ -30,6 +30,6 @@
     "eslint-plugin-prettier": "5.5.7",
     "neostandard": "0.14.1",
     "prettier": "3.10.1",
-    "vitest": "5.1.0"
+    "vitest": "5.1.1"
   }
 }
